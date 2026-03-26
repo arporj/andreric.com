@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>André Ric | Software Engineer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-primary-container": "#eeefff",
+                "tertiary-fixed": "#dae2fd",
+                "on-primary": "#ffffff",
+                "secondary-fixed-dim": "#b9c7df",
+                "surface-container-high": "#e6e8ea",
+                "primary": "#004ac6",
+                "on-surface": "#191c1e",
+                "secondary": "#515f74",
+                "on-primary-fixed": "#00174b",
+                "error": "#ba1a1a",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed": "#131b2e",
+                "surface-container-lowest": "#ffffff",
+                "surface-tint": "#0053db",
+                "inverse-primary": "#b4c5ff",
+                "on-surface-variant": "#434655",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed-variant": "#3a485b",
+                "secondary-container": "#d5e3fc",
+                "background": "#f7f9fb",
+                "on-secondary-fixed": "#0d1c2e",
+                "primary-fixed": "#dbe1ff",
+                "outline-variant": "#c3c6d7",
+                "tertiary": "#4d556b",
+                "on-primary-fixed-variant": "#003ea8",
+                "on-tertiary-container": "#eef0ff",
+                "on-error": "#ffffff",
+                "outline": "#737686",
+                "surface-container": "#eceef0",
+                "surface-container-highest": "#e0e3e5",
+                "inverse-on-surface": "#eff1f3",
+                "primary-container": "#2563eb",
+                "surface": "#f7f9fb",
+                "on-background": "#191c1e",
+                "secondary-fixed": "#d5e3fc",
+                "tertiary-fixed-dim": "#bec6e0",
+                "tertiary-container": "#656d84",
+                "on-tertiary-fixed-variant": "#3f465c",
+                "on-secondary": "#ffffff",
+                "surface-container-low": "#f2f4f6",
+                "surface-dim": "#d8dadc",
+                "primary-fixed-dim": "#b4c5ff",
+                "surface-bright": "#f7f9fb",
+                "inverse-surface": "#2d3133",
+                "on-secondary-container": "#57657a",
+                "on-tertiary": "#ffffff",
+                "surface-variant": "#e0e3e5"
+              },
+              fontFamily: {
+                "headline": ["Inter"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-slate-200/10 shadow-sm transition-all duration-300">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold tracking-tighter text-slate-900">André Ric</div>
+<!-- Desktop Links -->
+<div class="hidden md:flex items-center gap-8 font-medium text-sm tracking-wide">
+<a class="text-slate-600 hover:text-slate-900 transition-colors" href="#about">About</a>
+<a class="text-slate-600 hover:text-slate-900 transition-colors" href="#experience">Experience</a>
+<a class="text-slate-600 hover:text-slate-900 transition-colors" href="#skills">Skills</a>
+<a class="text-slate-600 hover:text-slate-900 transition-colors" href="#projects">Projects</a>
+<a class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1" href="#contact">Contact</a>
+</div>
+<!-- Mobile Menu Button -->
+<button class="md:hidden p-2 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-20 px-8 overflow-hidden">
+<div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<div class="space-y-2">
+<span class="text-primary font-semibold tracking-widest uppercase text-xs">Architecting Digital Experiences</span>
+<h1 class="text-[3.5rem] md:text-[5rem] font-extrabold leading-[1.1] tracking-tight text-on-surface">
+                            Hi, I'm <span class="text-primary">André Ric.</span>
+</h1>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light max-w-lg leading-relaxed">
+                            A Software Engineer dedicated to precision, performance, and clean code.
+                        </p>
+</div>
+<div class="flex flex-wrap gap-4">
+<a class="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-medium shadow-lg hover:-translate-y-1 transition-all duration-300" href="#projects">
+                            View Projects
+                        </a>
+<button class="px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium hover:bg-surface-container-low transition-all duration-300">
+                            Download CV
+                        </button>
+</div>
+</div>
+<div class="relative hidden md:block">
+<div class="aspect-square rounded-xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+<img alt="André Ric Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional man in a clean studio setting with soft directional lighting and a minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmtTPlURA3p-Uya3sv-2_PawK1R8weFfA6r5U5vOfpXznovdQ4MtcxITsrl2mEbFlr0kagJxy2jHLRbRMxlvVuazrJV1I_khsL4yz5yB0Fgd-zkphSTBsRmnK51D-t3Ih8pObb21L7GlpuHq_8I2tbDLr7dODo9DW_ZHGc3yUBj-S5yPNGRQgFcNwvEv-IS7wE7OJnUVzmLmisCkjb0s16NeNVheKijWWVrmbuuMwpkl4fLzj8qIIZQYShi-vih4om2gfA3dyuHETa"/>
+</div>
+<div class="absolute -bottom-6 -left-6 p-6 bg-surface-container-lowest rounded-lg shadow-xl border border-outline-variant border-opacity-10">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="code">code</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Experience</p>
+<p class="text-lg font-bold text-on-surface">8+ Years</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-24 px-8 bg-surface-container-low" id="about">
+<div class="max-w-7xl mx-auto">
+<div class="grid md:grid-cols-12 gap-16">
+<div class="md:col-span-7 space-y-6">
+<h2 class="text-[1.75rem] font-bold text-on-surface tracking-tight">Technical Philosophy</h2>
+<div class="space-y-4 text-on-surface-variant leading-relaxed text-lg">
+<p>
+                                I approach software development as a form of digital architecture. Every line of code should serve a purpose, and every interface should feel intuitive and seamless.
+                            </p>
+<p>
+                                With nearly a decade of experience across the stack, I specialize in building scalable web applications that don't just work—they excel. My focus is on the intersection of robust backend logic and elegant frontend presentation.
+                            </p>
+</div>
+</div>
+<div class="md:col-span-5 grid grid-cols-2 gap-4">
+<div class="p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5">
+<p class="text-xs font-bold text-primary uppercase mb-2">Location</p>
+<p class="font-medium">San Francisco, CA</p>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5">
+<p class="text-xs font-bold text-primary uppercase mb-2">Education</p>
+<p class="font-medium">M.S. Computer Science</p>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5">
+<p class="text-xs font-bold text-primary uppercase mb-2">Specialty</p>
+<p class="font-medium">Full-Stack Architecture</p>
+</div>
+<div class="p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5">
+<p class="text-xs font-bold text-primary uppercase mb-2">Availability</p>
+<p class="font-medium">Open to Projects</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Experience Section -->
+<section class="py-24 px-8 bg-surface" id="experience">
+<div class="max-w-4xl mx-auto">
+<div class="mb-16 text-center">
+<h2 class="text-[1.75rem] font-bold text-on-surface tracking-tight">Career Journey</h2>
+<div class="h-1 w-20 bg-primary mx-auto mt-4 rounded-full"></div>
+</div>
+<div class="space-y-12 relative before:content-[''] before:absolute before:left-0 md:before:left-1/2 before:w-px before:h-full before:bg-outline-variant before:opacity-20">
+<!-- Experience Item 1 -->
+<div class="relative pl-8 md:pl-0 md:flex items-center justify-between group">
+<div class="hidden md:block w-[45%] text-right pr-12">
+<span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">2021 — Present</span>
+</div>
+<div class="absolute left-[-4px] md:left-1/2 md:-ml-1 w-2 h-2 rounded-full bg-primary ring-4 ring-primary-container ring-opacity-20 z-10 transition-transform group-hover:scale-150"></div>
+<div class="md:w-[45%] md:pl-12">
+<div class="p-8 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-10 group-hover:shadow-lg transition-all duration-300">
+<span class="md:hidden text-xs font-bold text-primary uppercase block mb-2">2021 — Present</span>
+<h3 class="text-xl font-bold text-on-surface">Senior Systems Architect</h3>
+<p class="text-primary font-medium mb-4">Lumina Tech Solutions</p>
+<ul class="space-y-2 text-on-surface-variant text-sm list-disc list-inside">
+<li>Led a team of 12 engineers in migrating legacy infrastructure to microservices.</li>
+<li>Reduced cloud operational costs by 35% through container optimization.</li>
+<li>Implemented CI/CD pipelines that cut deployment time by 60%.</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Experience Item 2 -->
+<div class="relative pl-8 md:pl-0 md:flex items-center justify-between group">
+<div class="md:w-[45%] md:pr-12 md:order-1 order-2">
+<div class="p-8 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-10 group-hover:shadow-lg transition-all duration-300 text-left md:text-right">
+<span class="md:hidden text-xs font-bold text-primary uppercase block mb-2">2018 — 2021</span>
+<h3 class="text-xl font-bold text-on-surface">Lead Full-Stack Developer</h3>
+<p class="text-primary font-medium mb-4">Creative Flow Agency</p>
+<ul class="space-y-2 text-on-surface-variant text-sm md:list-none">
+<li>Spearheaded development of 50+ client web applications.</li>
+<li>Integrated advanced real-time features using WebSockets and Node.js.</li>
+<li>Mentored junior developers and established internal coding standards.</li>
+</ul>
+</div>
+</div>
+<div class="absolute left-[-4px] md:left-1/2 md:-ml-1 w-2 h-2 rounded-full bg-primary ring-4 ring-primary-container ring-opacity-20 z-10 transition-transform group-hover:scale-150 order-1 md:order-2"></div>
+<div class="hidden md:block md:w-[45%] pl-12 order-3">
+<span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">2018 — 2021</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills Section -->
+<section class="py-24 px-8 bg-surface-container-low" id="skills">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-[1.75rem] font-bold text-on-surface tracking-tight mb-12">Technical Toolkit</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Frontend -->
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="brush">brush</span>
+</div>
+<h3 class="text-xl font-bold mb-6">Frontend Architecture</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">React / Next.js</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">TypeScript</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Tailwind CSS</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Framer Motion</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Three.js</span>
+</div>
+</div>
+<!-- Backend -->
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="database">database</span>
+</div>
+<h3 class="text-xl font-bold mb-6">Backend &amp; Systems</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Node.js</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">PostgreSQL</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Redis</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">GraphQL</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Python / FastAPI</span>
+</div>
+</div>
+<!-- Tools -->
+<div class="p-10 bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+</div>
+<h3 class="text-xl font-bold mb-6">Infrastructure &amp; Tools</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Docker / K8s</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">AWS / GCP</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Terraform</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">CI/CD</span>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-medium">Git / GitHub</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects Section -->
+<section class="py-24 px-8 bg-surface" id="projects">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+<div class="space-y-4">
+<h2 class="text-[1.75rem] font-bold text-on-surface tracking-tight">Featured Projects</h2>
+<p class="text-on-surface-variant max-w-xl text-lg">A selection of my recent work focusing on complex systems and high-fidelity user interfaces.</p>
+</div>
+<a class="text-primary font-bold hover:underline underline-offset-8 transition-all" href="#">View All Work →</a>
+</div>
+<div class="grid md:grid-cols-2 gap-12">
+<!-- Project Card 1 -->
+<div class="group">
+<div class="aspect-video rounded-xl overflow-hidden mb-8 shadow-md border border-outline-variant border-opacity-10 relative">
+<img alt="Data Analytics Dashboard" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Modern dark-themed data analytics dashboard showing complex charts and real-time metrics with vibrant glowing accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-KAg-8IorkDL9leTYCQQ_FJEpXnBIZDOQhkjGLNQPYkQek2lB2h6W566IDEuaaawWPwpa5ttCAT1YLAyAriI7o6SQjDHfQTQYlzHwFBPGmmcQ4qeJT1kVhhz1R4G_JRRxeziebT6h20e8gX2T5eq1zfaCqdzCPxgoH3u7d3NA5yMPf5JDelvVFyL__2okiDDcIJCNssLk8wsiUpLp-YqL_Bsrzg5knlasUbYh9HSjptVWmrQB9IQoWfyvA8U4-71VrC2Ie-YXOIzK"/>
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-2">
+<span class="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary-container/10 px-2 py-1 rounded">SaaS</span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary-container/10 px-2 py-1 rounded">Analytics</span>
+</div>
+<h3 class="text-2xl font-bold group-hover:text-primary transition-colors">Vortex Insight Platform</h3>
+<p class="text-on-surface-variant leading-relaxed">A real-time analytics engine processing over 10M events daily with sub-second latency and an intuitive React dashboard.</p>
+<div class="flex gap-6 pt-2">
+<a class="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="open_in_new">open_in_new</span> Live Demo
+                                </a>
+<a class="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="terminal">terminal</span> GitHub
+                                </a>
+</div>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="group">
+<div class="aspect-video rounded-xl overflow-hidden mb-8 shadow-md border border-outline-variant border-opacity-10 relative">
+<img alt="Secure Messaging App" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Conceptual UI for a secure encrypted messaging application with a clean blue and white aesthetic and biometric security elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgDrKrhmLfI_Tf3rfAzhRY7tSYHY7AKssgF4FBCwNfGsBoRr9qTMEQGopRabySMu46W2WczUFwVd_ZYHmQZGv5Wu-MAv-AYWEGuWWoM0kpNpRwls-1PaNHgzKH9ErbRGrZUZIq2tTRXUsFRC2cgGu6BEamMZJlft-FSXGVogs468h6Kl5Y-pLi8SrVfoobiDEch8l6rMk5Z4AFjUZwQCbhNpkV-J6IN2Sxliu14234nhpjk90V5NZU9qsPh4gBcX9PszByZS8rNFK3"/>
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-2">
+<span class="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary-container/10 px-2 py-1 rounded">FinTech</span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary-container/10 px-2 py-1 rounded">Security</span>
+</div>
+<h3 class="text-2xl font-bold group-hover:text-primary transition-colors">Cipher Wallet &amp; Messenger</h3>
+<p class="text-on-surface-variant leading-relaxed">End-to-end encrypted financial communication suite featuring multi-signature wallet support and hardware key integration.</p>
+<div class="flex gap-6 pt-2">
+<a class="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="open_in_new">open_in_new</span> Live Demo
+                                </a>
+<a class="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="terminal">terminal</span> GitHub
+                                </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact CTA -->
+<section class="py-24 px-8 bg-surface-container-high" id="contact">
+<div class="max-w-4xl mx-auto text-center space-y-8">
+<h2 class="text-[3rem] font-extrabold tracking-tight text-on-surface">Ready to build something <span class="text-primary italic">exceptional?</span></h2>
+<p class="text-xl text-on-surface-variant max-w-2xl mx-auto font-light">
+                    I'm currently accepting new projects and consulting opportunities. Let's discuss how we can bring your vision to life.
+                </p>
+<div class="pt-8">
+<a class="inline-flex items-center gap-3 px-10 py-5 bg-on-surface text-surface rounded-full text-lg font-bold hover:scale-105 transition-all shadow-xl" href="mailto:hello@andreric.com">
+                        Start a Conversation
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 border-t border-outline-variant border-opacity-10 py-12 px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+<div class="text-xs font-['Inter'] uppercase tracking-widest text-slate-500">
+                © 2024 André Ric. Built with Precision.
+            </div>
+<div class="flex items-center gap-8">
+<a class="text-slate-400 hover:text-blue-500 transition-colors hover:translate-y-[-2px] transition-transform duration-300" href="#">
+<span class="sr-only">LinkedIn</span>
+<span class="material-symbols-outlined" data-icon="link">link</span>
+</a>
+<a class="text-slate-400 hover:text-blue-500 transition-colors hover:translate-y-[-2px] transition-transform duration-300" href="#">
+<span class="sr-only">GitHub</span>
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</a>
+<a class="text-slate-400 hover:text-blue-500 transition-colors hover:translate-y-[-2px] transition-transform duration-300" href="mailto:hello@andreric.com">
+<span class="sr-only">Email</span>
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</a>
+</div>
+<div class="md:hidden text-xs text-slate-400 italic">
+                Engineering Excellence
+            </div>
+</div>
+</footer>
+</body></html>
