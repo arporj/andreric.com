@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>André Ric - Admin Area Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#eceef0",
+              "outline": "#737686",
+              "surface-container-highest": "#e0e3e5",
+              "inverse-on-surface": "#eff1f3",
+              "tertiary": "#4d556b",
+              "on-primary-fixed-variant": "#003ea8",
+              "on-tertiary-container": "#eef0ff",
+              "on-error": "#ffffff",
+              "surface": "#f7f9fb",
+              "primary-container": "#2563eb",
+              "on-background": "#191c1e",
+              "secondary-fixed": "#d5e3fc",
+              "tertiary-container": "#656d84",
+              "tertiary-fixed-dim": "#bec6e0",
+              "on-secondary": "#ffffff",
+              "on-tertiary-fixed-variant": "#3f465c",
+              "surface-container-low": "#f2f4f6",
+              "surface-dim": "#d8dadc",
+              "surface-bright": "#f7f9fb",
+              "primary-fixed-dim": "#b4c5ff",
+              "inverse-surface": "#2d3133",
+              "on-tertiary": "#ffffff",
+              "surface-variant": "#e0e3e5",
+              "on-secondary-container": "#57657a",
+              "surface-container-high": "#e6e8ea",
+              "secondary-fixed-dim": "#b9c7df",
+              "tertiary-fixed": "#dae2fd",
+              "on-primary-container": "#eeefff",
+              "on-primary": "#ffffff",
+              "primary": "#004ac6",
+              "on-primary-fixed": "#00174b",
+              "on-surface": "#191c1e",
+              "secondary": "#515f74",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "surface-tint": "#0053db",
+              "inverse-primary": "#b4c5ff",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#131b2e",
+              "on-secondary-fixed-variant": "#3a485b",
+              "on-surface-variant": "#434655",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#0d1c2e",
+              "background": "#f7f9fb",
+              "primary-fixed": "#dbe1ff",
+              "outline-variant": "#c3c6d7",
+              "secondary-container": "#d5e3fc"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar Shell Suppressed for focused login task as per "Semantic Shell Mandate" - Suppressed during transactional login flow -->
+<!-- However, JSON provided specific instructions, so I will render a minimal version that adheres to the "Precision Architect" glass style -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-slate-200/10 dark:border-slate-800/10 shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="text-lg font-bold tracking-tighter text-slate-900 dark:text-slate-100">André Ric - Admin Area</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">account_circle</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-center px-6 relative overflow-hidden pt-20">
+<!-- Background Abstract Element -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -z-10"></div>
+<div class="w-full max-w-md glass-card rounded-lg p-10 shadow-[0_20px_40px_rgba(15,23,42,0.04)] border border-white/20">
+<!-- Logo & Title Area -->
+<div class="text-center mb-10">
+<h1 class="font-headline font-bold text-2xl tracking-tighter text-on-surface mb-2">André Ric - Admin Area</h1>
+<p class="text-on-surface-variant text-sm font-medium tracking-tight">Access the Precision Dashboard</p>
+</div>
+<!-- Login Form -->
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="relative group">
+<input class="peer w-full bg-surface-container-lowest border border-outline-variant/30 rounded-full px-6 py-4 text-on-surface placeholder-transparent focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all duration-200" id="email" placeholder=" " type="email"/>
+<label class="absolute left-6 top-4 text-on-surface-variant text-sm transition-all duration-200 pointer-events-none peer-focus:-top-2.5 peer-focus:left-5 peer-focus:text-xs peer-focus:bg-surface-container-lowest peer-focus:px-2 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:bg-surface-container-lowest peer-[:not(:placeholder-shown)]:px-2" for="email">
+                        Email Address
+                    </label>
+</div>
+<!-- Password Field -->
+<div class="relative group">
+<input class="peer w-full bg-surface-container-lowest border border-outline-variant/30 rounded-full px-6 py-4 text-on-surface placeholder-transparent focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all duration-200" id="password" placeholder=" " type="password"/>
+<label class="absolute left-6 top-4 text-on-surface-variant text-sm transition-all duration-200 pointer-events-none peer-focus:-top-2.5 peer-focus:left-5 peer-focus:text-xs peer-focus:bg-surface-container-lowest peer-focus:px-2 peer-[:not(:placeholder-shown)]:-top-2.5 peer-[:not(:placeholder-shown)]:left-5 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:bg-surface-container-lowest peer-[:not(:placeholder-shown)]:px-2" for="password">
+                        Password
+                    </label>
+</div>
+<!-- Sign In Button -->
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-semibold py-4 rounded-full shadow-lg shadow-primary/10 hover:-translate-y-0.5 hover:shadow-xl active:scale-95 transition-all duration-200" type="submit">
+                    Sign In
+                </button>
+</form>
+<!-- Forgot Link (Secondary Action) -->
+<div class="mt-8 text-center">
+<a class="text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">
+                    Forgot Password?
+                </a>
+</div>
+</div>
+<!-- Return to Portfolio (Contextual Footer Link) -->
+<div class="mt-10 flex items-center gap-2 group cursor-pointer">
+<span class="material-symbols-outlined text-sm text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<a class="text-sm font-medium text-primary hover:text-on-primary-fixed-variant transition-colors" href="#">Return to Portfolio</a>
+</div>
+</main>
+<!-- Footer Component as per JSON -->
+<footer class="w-full py-8 mt-auto bg-transparent">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 w-full">
+<div class="font-['Inter'] text-[11px] uppercase tracking-[0.05em] font-medium text-slate-400 dark:text-slate-500">
+                © 2024 André Ric. Built for Precision.
+            </div>
+<div class="flex gap-8 mt-4 md:mt-0">
+<a class="font-['Inter'] text-[11px] uppercase tracking-[0.05em] font-medium text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-[11px] uppercase tracking-[0.05em] font-medium text-blue-600 dark:text-blue-400 underline decoration-2 underline-offset-4 hover:text-slate-900 dark:hover:text-slate-100 transition-all" href="#">Return to Portfolio</a>
+</div>
+</div>
+</footer>
+</body></html>
