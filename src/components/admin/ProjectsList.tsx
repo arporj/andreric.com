@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { TagInput } from './TagInput';
 
 type Project = {
   id: string;
@@ -157,16 +158,11 @@ export function ProjectsList() {
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-700">Tecnologias Usadas (separadas por vírgula)</label>
-            <input 
-              required
-              value={Array.isArray(currentProj?.tecnologias) ? currentProj.tecnologias.join(', ') : currentProj?.tecnologias || ''}
-              onChange={e => setCurrentProj({...currentProj, tecnologias: e.target.value as any})}
-              placeholder="React, Node.js, Tailwind..."
-              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
-            />
-          </div>
+          <TagInput
+            label="Tecnologias Usadas"
+            value={Array.isArray(currentProj?.tecnologias) ? currentProj.tecnologias.join(', ') : currentProj?.tecnologias || ''}
+            onChange={val => setCurrentProj({...currentProj, tecnologias: val as any})}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1">

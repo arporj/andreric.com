@@ -5,6 +5,7 @@ import { ProfileForm } from '../components/admin/ProfileForm';
 import { ExperienceList } from '../components/admin/ExperienceList';
 import { ProjectsList } from '../components/admin/ProjectsList';
 import { SkillsList } from '../components/admin/SkillsList';
+import { TagsList } from '../components/admin/TagsList';
 
 export function AdminDashboard() {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ export function AdminDashboard() {
         return <ProjectsList />;
       case 'skills':
         return <SkillsList />;
+      case 'tags':
+        return <TagsList />;
       default:
         return <ProfileForm />;
     }
@@ -99,6 +102,14 @@ export function AdminDashboard() {
             <span className="material-symbols-outlined text-[20px]">psychology</span>
             Habilidades
           </button>
+
+          <button 
+            onClick={() => setActiveTab('tags')}
+            className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${activeTab === 'tags' ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
+          >
+            <span className="material-symbols-outlined text-[20px]">sell</span>
+            Tags de Tecnologia
+          </button>
         </nav>
 
         <div className="p-4 border-t border-slate-200">
@@ -120,6 +131,7 @@ export function AdminDashboard() {
             {activeTab === 'experience' && 'Gerenciar Experiências'}
             {activeTab === 'projects' && 'Gerenciar Projetos'}
             {activeTab === 'skills' && 'Habilidades Técnicas'}
+            {activeTab === 'tags' && 'Tags de Tecnologia'}
           </h2>
           <a href="/" target="_blank" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
             Ver Site <span className="material-symbols-outlined text-[16px]">open_in_new</span>

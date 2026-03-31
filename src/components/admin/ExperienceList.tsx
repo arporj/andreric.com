@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { TagInput } from './TagInput';
 
 type Experience = {
   id: string;
@@ -172,15 +173,11 @@ export function ExperienceList() {
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-700">Tecnologias Utilizadas (Separadas por vírgula)</label>
-            <input 
-              value={currentExp?.tecnologias || ''}
-              onChange={e => setCurrentExp({...currentExp, tecnologias: e.target.value})}
-              placeholder="Ex: React, Node.js, Supabase, Tailwind CSS"
-              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
-            />
-          </div>
+          <TagInput
+            label="Tecnologias Utilizadas"
+            value={currentExp?.tecnologias || ''}
+            onChange={val => setCurrentExp({...currentExp, tecnologias: val})}
+          />
 
           <div className="flex gap-3 justify-end pt-4">
             <button 

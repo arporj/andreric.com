@@ -21,17 +21,20 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [profileRes, expRes, projRes, skillsRes] = await Promise.all([
+        const [profileRes, expRes, projRes, skillsRes, tagsRes] = await Promise.all([
           supabase.from('profile').select('*').limit(1).single(),
           supabase.from('experiencias').select('*').order('inicio', { ascending: false }),
           supabase.from('projetos').select('*').order('destaque', { ascending: false }).order('nome', { ascending: true }),
-          supabase.from('habilidades').select('*, categorias_habilidades(*)').order('nome', { ascending: true })
+          supabase.from('habilidades').select('*, categorias_habilidades(*)').order('nome', { ascending: true }),
+          supabase.from('tecnologias_tags').select('*').order('importancia', { ascending: false }).order('nome', { ascending: true })
         ]);
 
         const profile = profileRes.data;
         const experiences = expRes.data || [];
         const projects = projRes.data || [];
         const skillsDB = skillsRes.data || [];
+        const tagsRegistry: { nome: string; categoria: string; importancia: number }[] = tagsRes.data || [];
+        const tagsMap = new Map(tagsRegistry.map(t => [t.nome.toLowerCase(), t]));
         
         if (!profile) {
           setLoading(false); 
@@ -120,13 +123,19 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return null;
         };
 
-        // Distribuir as tecnologias nas categorias existentes
-        const techByCategory: Record<string, string[]> = { frontend: [], backend: [], infrastructure: [] };
+        // Distribuir as tecnologias nas categorias — prioridade: tabela de tags, depois classificador de palavras-chave
+        const techByCategory: Record<string, { nome: string; importancia: number }[]> = { frontend: [], backend: [], infrastructure: [], other: [] };
         const unclassified: string[] = [];
         allTechs.forEach(tech => {
-          const cat = classifyTech(tech);
-          if (cat) techByCategory[cat].push(tech);
-          else unclassified.push(tech);
+          const registered = tagsMap.get(tech.toLowerCase());
+          if (registered) {
+            const cat = registered.categoria in techByCategory ? registered.categoria : 'other';
+            techByCategory[cat].push({ nome: tech, importancia: registered.importancia });
+          } else {
+            const cat = classifyTech(tech);
+            if (cat) techByCategory[cat].push({ nome: tech, importancia: 0 });
+            else unclassified.push(tech);
+          }
         });
 
         // Categorias base sem as tags estáticas — apenas metadados (id, icon, title)
@@ -136,7 +145,10 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         const enrichedCategories: { id: string; icon: string; title: string; tags: string[] }[] = baseCategories.map(cat => ({
           ...cat,
-          tags: techByCategory[cat.id] || []
+          // Ordenar por importancia desc, depois alfabeticamente
+          tags: (techByCategory[cat.id] || [])
+            .sort((a, b) => b.importancia - a.importancia || a.nome.localeCompare(b.nome))
+            .map(t => t.nome)
         }));
 
         // Se houver tecnologias não classificadas, adicionar numa categoria extra
