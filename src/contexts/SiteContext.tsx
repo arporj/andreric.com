@@ -56,6 +56,12 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         
         const mappedCategories = Array.from(catsMap.values());
 
+        const formatarMesAno = (data: string | null) => {
+          if (!data) return 'Presente';
+          const [year, month] = data.split('-');
+          return `${month}/${year}`;
+        };
+
         // Map everything to match exactly the mockData.ts interface
         const mappedData = {
           header: { ...fallbackData.header },
@@ -79,10 +85,10 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             ...fallbackData.experience,
             items: experiences.length > 0 ? experiences.map((exp: any, i: number) => ({
               id: exp.id,
-              period: `${new Date(exp.inicio).getFullYear()} — ${exp.fim ? new Date(exp.fim).getFullYear() : 'Presente'}`,
+              period: `De ${formatarMesAno(exp.inicio)} até ${formatarMesAno(exp.fim)}`,
               role: exp.cargo,
               company: exp.empresa,
-              details: exp.descricao || [],
+              details: exp.tecnologias ? [...(exp.descricao || []), exp.tecnologias] : (exp.descricao || []),
               align: i % 2 === 0 ? 'right' : 'left'
             })) : fallbackData.experience.items
           },

@@ -8,6 +8,7 @@ type Experience = {
   descricao: string[];
   inicio: string;
   fim: string | null;
+  tecnologias: string | null;
 };
 
 export function ExperienceList() {
@@ -67,8 +68,9 @@ export function ExperienceList() {
       empresa: currentExp.empresa,
       cargo: currentExp.cargo,
       descricao: descricaoArray,
-      inicio: currentExp.inicio,
-      fim: currentExp.fim || null,
+      inicio: currentExp.inicio && currentExp.inicio.length === 7 ? `${currentExp.inicio}-01` : currentExp.inicio,
+      fim: currentExp.fim && currentExp.fim.length === 7 ? `${currentExp.fim}-01` : (currentExp.fim || null),
+      tecnologias: currentExp.tecnologias || null,
     };
 
     try {
@@ -140,9 +142,9 @@ export function ExperienceList() {
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-700">Data de Início</label>
               <input 
-                type="date"
+                type="month"
                 required
-                value={currentExp?.inicio || ''}
+                value={currentExp?.inicio?.substring(0, 7) || ''}
                 onChange={e => setCurrentExp({...currentExp, inicio: e.target.value})}
                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
               />
@@ -150,12 +152,22 @@ export function ExperienceList() {
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-700">Data de Fim (deixe vazio se atual)</label>
               <input 
-                type="date"
-                value={currentExp?.fim || ''}
+                type="month"
+                value={currentExp?.fim?.substring(0, 7) || ''}
                 onChange={e => setCurrentExp({...currentExp, fim: e.target.value})}
                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
               />
             </div>
+          </div>
+
+          <div className="space-y-1 mt-4">
+            <label className="text-sm font-medium text-slate-700">Tecnologias Utilizadas</label>
+            <input 
+              value={currentExp?.tecnologias || ''}
+              onChange={e => setCurrentExp({...currentExp, tecnologias: e.target.value})}
+              placeholder="Ex: Utilizado Microsoft Visual Basic 5..."
+              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
+            />
           </div>
           
           <div className="space-y-1">
@@ -196,9 +208,10 @@ export function ExperienceList() {
                 <div>
                   <h4 className="font-bold text-slate-800">{exp.cargo} <span className="text-slate-500 font-normal">at</span> {exp.empresa}</h4>
                   <p className="text-sm text-slate-500 mt-1">
-                    {new Date(exp.inicio).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short' })} - 
-                    {exp.fim ? new Date(exp.fim).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short' }) : ' Presente'}
+                    {exp.inicio ? exp.inicio.split('-').slice(0, 2).reverse().join('/') : ''} - 
+                    {exp.fim ? exp.fim.split('-').slice(0, 2).reverse().join('/') : ' Presente'}
                   </p>
+                  {exp.tecnologias && <p className="text-xs text-slate-400 mt-1">{exp.tecnologias}</p>}
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleEdit(exp)} className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-full transition-all">
