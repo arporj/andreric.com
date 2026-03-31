@@ -22,6 +22,11 @@ export const Footer = () => {
             <span className="sr-only">Email</span>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>mail</span>
           </a>
+          {/* Admin Area Access using anchor for hard navigation initially */}
+          <a className="text-slate-400 hover:text-blue-500 transition-colors hover:-translate-y-1 transition-transform duration-300 ml-4 border-l border-slate-300 pl-4" href="/admin" title="Log in to Admin Area">
+            <span className="sr-only">Admin</span>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>lock</span>
+          </a>
         </div>
         <div className="md:hidden text-xs text-slate-400 italic">
           {footer.tagline}
