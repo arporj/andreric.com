@@ -8,7 +8,7 @@ export const Skills = () => {
     <section className="py-24 px-8 bg-surface-container-low" id="skills">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-[1.75rem] font-bold text-on-surface tracking-tight mb-12">{skills.title}</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           
           {skills.categories.map((category) => (
             <div key={category.id} className="p-10 bg-surface-container-lowest rounded-xl shadow-sm">
