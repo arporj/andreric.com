@@ -66,6 +66,42 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ? new Date().getFullYear() - new Date(experiences[experiences.length - 1].inicio).getFullYear() 
           : 0;
 
+        // Extrair todas as tecnologias únicas das experiências
+        const allTechs = experiences.reduce((acc: string[], exp: any) => {
+          if (exp.tecnologias) {
+            const techs = exp.tecnologias.split(',').map((t: string) => t.trim()).filter(Boolean);
+            return [...new Set([...acc, ...techs])];
+          }
+          return acc;
+        }, []);
+
+        // Se houver tecnologias novas nas experiências, podemos adicioná-las a uma categoria especial
+        // ou manter as categorias do fallback mas enriquecidas
+        const enrichedSkills = {
+          ...fallbackData.skills,
+          categories: fallbackData.skills.categories.map(cat => {
+            // Se for a categoria de frontend, vamos tentar ver se alguma tech nova se encaixa aqui (exemplo simples)
+            // Por enquanto, vamos apenas garantir que a lista seja dinâmica se quisermos, 
+            // mas o pedido é "baseado nas tags que eu cadastrei".
+            // Vamos criar uma lógica onde as tags cadastradas preenchem as categorias ou criam uma lista global.
+            return cat;
+          })
+        };
+
+        // Vamos simplificar: se o usuário cadastrou tags, elas devem aparecer.
+        // Vou criar uma categoria "Tecnologias de Projeto" com as tags extraídas se elas existirem.
+        if (allTechs.length > 0) {
+          enrichedSkills.categories = [
+            ...enrichedSkills.categories,
+            {
+              id: "recent-tech",
+              icon: "star",
+              title: "Tecnologias em Uso",
+              tags: allTechs.slice(0, 15) // Limitar a 15 para não quebrar o layout
+            }
+          ];
+        }
+
         // Map everything to match exactly the mockData.ts interface
         const mappedData = {
           header: { ...fallbackData.header },
