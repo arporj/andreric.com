@@ -1,6 +1,7 @@
-import { siteData } from '../data/mockData';
+import { useSiteData } from '../contexts/SiteContext';
 
 export const Skills = () => {
+  const { siteData } = useSiteData();
   const { skills } = siteData;
 
   return (

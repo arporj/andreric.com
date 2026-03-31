@@ -1,6 +1,7 @@
-import { siteData } from '../data/mockData';
+import { useSiteData } from '../contexts/SiteContext';
 
 export const Hero = () => {
+  const { siteData } = useSiteData();
   const { hero } = siteData;
 
   return (

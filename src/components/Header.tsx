@@ -1,6 +1,7 @@
-import { siteData } from '../data/mockData';
+import { useSiteData } from '../contexts/SiteContext';
 
 export const Header = () => {
+  const { siteData } = useSiteData();
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-slate-200/10 shadow-sm transition-all duration-300">
       <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">

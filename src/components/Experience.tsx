@@ -1,6 +1,7 @@
-import { siteData } from '../data/mockData';
+import { useSiteData } from '../contexts/SiteContext';
 
 export const Experience = () => {
+  const { siteData } = useSiteData();
   const { experience } = siteData;
 
   return (

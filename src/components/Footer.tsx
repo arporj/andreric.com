@@ -1,6 +1,7 @@
-import { siteData } from '../data/mockData';
+import { useSiteData } from '../contexts/SiteContext';
 
 export const Footer = () => {
+  const { siteData } = useSiteData();
   const { footer } = siteData;
 
   return (
