@@ -62,6 +62,10 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return `${month}/${year}`;
         };
 
+        const anosDeExperiencia = experiences.length > 0 
+          ? new Date().getFullYear() - new Date(experiences[experiences.length - 1].inicio).getFullYear() 
+          : 0;
+
         // Map everything to match exactly the mockData.ts interface
         const mappedData = {
           header: { ...fallbackData.header },
@@ -71,14 +75,17 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             upperSub: profile.titulo || fallbackData.hero.upperSub,
             description: profile.resumo || fallbackData.hero.description,
             imageSrc: profile.foto_url || fallbackData.hero.imageSrc,
+            badge: {
+              ...fallbackData.hero.badge,
+              value: `${anosDeExperiencia}+ Anos`
+            }
           },
           about: {
             ...fallbackData.about,
             facts: [
               { label: 'Localização', value: profile.cidade ? `${profile.cidade}, ${profile.pais}` : fallbackData.about.facts[0].value },
-              { label: 'E-mail', value: profile.email || 'Não informado' },
-              { label: 'Telefone', value: profile.telefone || 'Não informado' },
-              { label: 'Site URL', value: profile.site_url || 'Disponível' }
+              { label: 'E-mail', value: profile.email || 'Não informado', href: profile.email ? `mailto:${profile.email}` : undefined },
+              { label: 'Telefone', value: profile.telefone || 'Não informado', href: profile.telefone ? `https://wa.me/${profile.telefone.replace(/\D/g, '')}` : undefined }
             ]
           },
           experience: {

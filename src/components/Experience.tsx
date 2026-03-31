@@ -40,7 +40,7 @@ export const Experience = () => {
                     {item.tecnologias && (
                       <div className={`mt-4 pt-4 border-t border-outline-variant/10 ${isLeft ? 'md:pr-2' : 'pl-2'}`}>
                         <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Tecnologias Utilizadas</span>
-                        <p className="text-sm font-medium text-primary">{item.tecnologias}</p>
+                        <p className="text-sm text-on-surface leading-relaxed">{item.tecnologias}</p>
                       </div>
                     )}
                   </div>

@@ -18,13 +18,31 @@ export const About = () => {
             </div>
           </div>
           
-          <div className="md:col-span-5 grid grid-cols-2 gap-4">
-            {about.facts.map((fact, idx) => (
-              <div key={idx} className="p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5">
-                <p className="text-xs font-bold text-primary uppercase mb-2">{fact.label}</p>
-                <p className="font-medium">{fact.value}</p>
-              </div>
-            ))}
+          <div className="md:col-span-5 flex flex-col gap-4">
+            {about.facts.map((fact: any, idx: number) => {
+              const content = (
+                <>
+                  <p className="text-xs font-bold text-primary uppercase mb-2">{fact.label}</p>
+                  <p className="font-medium text-on-surface">{fact.value}</p>
+                </>
+              );
+              
+              const className = "p-6 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-5 transition-all w-full text-left";
+              
+              if (fact.href) {
+                return (
+                  <a key={idx} href={fact.href} target="_blank" rel="noreferrer" className={`${className} hover:border-primary/30 hover:shadow-md cursor-pointer block`}>
+                    {content}
+                  </a>
+                );
+              }
+              
+              return (
+                <div key={idx} className={className}>
+                  {content}
+                </div>
+              );
+            })}
           </div>
 
         </div>
