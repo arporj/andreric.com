@@ -39,8 +39,18 @@ export const Experience = () => {
                     </ul>
                     {item.tecnologias && (
                       <div className={`mt-4 pt-4 border-t border-outline-variant/10 ${isLeft ? 'md:pr-2' : 'pl-2'}`}>
-                        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Tecnologias Utilizadas</span>
-                        <p className="text-sm text-on-surface leading-relaxed">{item.tecnologias}</p>
+                        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-3">Tecnologias Utilizadas</span>
+                        <div className={`flex flex-wrap gap-2 ${isLeft ? 'md:justify-end' : ''}`}>
+                          {item.tecnologias.split(',').map((tech: string, i: number) => {
+                            const trimmed = tech.trim();
+                            if (!trimmed) return null;
+                            return (
+                              <span key={i} className="px-3 py-1 bg-surface-container-highest text-on-surface text-xs font-semibold rounded-full border border-outline-variant/20 hover:border-primary/50 transition-colors cursor-default">
+                                {trimmed}
+                              </span>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>
