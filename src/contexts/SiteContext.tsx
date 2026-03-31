@@ -67,40 +67,28 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           : 0;
 
         // Extrair todas as tecnologias únicas das experiências
-        const allTechs = experiences.reduce((acc: string[], exp: any) => {
+        const allTechs: string[] = experiences.reduce((acc: string[], exp: any) => {
           if (exp.tecnologias) {
             const techs = exp.tecnologias.split(',').map((t: string) => t.trim()).filter(Boolean);
-            return [...new Set([...acc, ...techs])];
+            techs.forEach((t: string) => { if (!acc.includes(t)) acc.push(t); });
           }
           return acc;
         }, []);
 
-        // Se houver tecnologias novas nas experiências, podemos adicioná-las a uma categoria especial
-        // ou manter as categorias do fallback mas enriquecidas
-        const enrichedSkills = {
-          ...fallbackData.skills,
-          categories: fallbackData.skills.categories.map(cat => {
-            // Se for a categoria de frontend, vamos tentar ver se alguma tech nova se encaixa aqui (exemplo simples)
-            // Por enquanto, vamos apenas garantir que a lista seja dinâmica se quisermos, 
-            // mas o pedido é "baseado nas tags que eu cadastrei".
-            // Vamos criar uma lógica onde as tags cadastradas preenchem as categorias ou criam uma lista global.
-            return cat;
-          })
-        };
-
-        // Vamos simplificar: se o usuário cadastrou tags, elas devem aparecer.
-        // Vou criar uma categoria "Tecnologias de Projeto" com as tags extraídas se elas existirem.
-        if (allTechs.length > 0) {
-          enrichedSkills.categories = [
-            ...enrichedSkills.categories,
-            {
-              id: "recent-tech",
-              icon: "star",
-              title: "Tecnologias em Uso",
-              tags: allTechs.slice(0, 15) // Limitar a 15 para não quebrar o layout
-            }
-          ];
-        }
+        // Skills: se houver tecnologias cadastradas nas experiências, exibir como categoria dinâmica
+        // Se o banco de habilidades tiver dados, usar; senão, usar fallback + techs das experiências
+        const baseCategories = mappedCategories.length > 0 ? mappedCategories : fallbackData.skills.categories;
+        const enrichedCategories = allTechs.length > 0
+          ? [
+              ...baseCategories,
+              {
+                id: 'exp-tech',
+                icon: 'code',
+                title: 'Tecnologias das Experiências',
+                tags: allTechs.slice(0, 20)
+              }
+            ]
+          : baseCategories;
 
         // Map everything to match exactly the mockData.ts interface
         const mappedData = {
@@ -138,7 +126,7 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           },
           skills: {
             ...fallbackData.skills,
-            categories: mappedCategories.length > 0 ? mappedCategories : fallbackData.skills.categories
+            categories: enrichedCategories
           },
           projects: {
             ...fallbackData.projects,
