@@ -66,14 +66,29 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ? new Date().getFullYear() - new Date(experiences[experiences.length - 1].inicio).getFullYear() 
           : 0;
 
-        // Extrair todas as tecnologias únicas das experiências
-        const allTechs: string[] = experiences.reduce((acc: string[], exp: any) => {
+        // Extrair todas as tecnologias únicas das experiências + projetos
+        const addUnique = (acc: string[], items: string[]) => {
+          items.forEach(t => { if (t && !acc.includes(t)) acc.push(t); });
+          return acc;
+        };
+
+        const allTechs: string[] = [];
+
+        // Tags das experiências
+        experiences.forEach((exp: any) => {
           if (exp.tecnologias) {
             const techs = exp.tecnologias.split(',').map((t: string) => t.trim()).filter(Boolean);
-            techs.forEach((t: string) => { if (!acc.includes(t)) acc.push(t); });
+            addUnique(allTechs, techs);
           }
-          return acc;
-        }, []);
+        });
+
+        // Tags dos projetos (campo tecnologias pode ser string CSV ou array)
+        projects.forEach((p: any) => {
+          if (!p.tecnologias) return;
+          const raw = Array.isArray(p.tecnologias) ? p.tecnologias : p.tecnologias.split(',');
+          const techs = raw.map((t: string) => t.trim()).filter(Boolean);
+          addUnique(allTechs, techs);
+        });
 
         // Classificador de tecnologias por categoria
         const frontendKeywords = [
@@ -114,11 +129,14 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           else unclassified.push(tech);
         });
 
-        // Enriquecer as categorias base com as tecnologias classificadas
-        const baseCategories = mappedCategories.length > 0 ? mappedCategories : fallbackData.skills.categories;
-        const enrichedCategories = baseCategories.map(cat => ({
+        // Categorias base sem as tags estáticas — apenas metadados (id, icon, title)
+        const baseCategories = mappedCategories.length > 0
+          ? mappedCategories.map(cat => ({ ...cat, tags: [] }))
+          : fallbackData.skills.categories.map(cat => ({ ...cat, tags: [] }));
+
+        const enrichedCategories: { id: string; icon: string; title: string; tags: string[] }[] = baseCategories.map(cat => ({
           ...cat,
-          tags: [...new Set([...cat.tags, ...(techByCategory[cat.id] || [])])]
+          tags: techByCategory[cat.id] || []
         }));
 
         // Se houver tecnologias não classificadas, adicionar numa categoria extra
