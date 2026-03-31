@@ -30,13 +30,19 @@ export const Experience = () => {
                 <div className={`md:w-[45%] ${isLeft ? 'md:pr-12 md:order-1 order-2' : 'md:pl-12 order-3 md:order-3'}`}>
                   <div className={`p-8 bg-surface-container-lowest rounded-DEFAULT shadow-sm border border-outline-variant border-opacity-10 group-hover:shadow-lg transition-all duration-300 text-left ${isLeft ? 'md:text-right' : ''}`}>
                     <span className="md:hidden text-xs font-bold text-primary uppercase block mb-2">{item.period}</span>
-                    <h3 className="text-xl font-bold text-primary">{item.company}</h3>
+                    <h3 className="font-bold text-primary">{item.company}</h3>
                     <p className="text-on-surface font-medium mb-4">{item.role}</p>
                     <ul className={`space-y-2 text-on-surface-variant text-sm ${isLeft ? 'md:list-none space-y-2' : 'list-disc list-inside'}`}>
                       {item.details.map((detail, idx) => (
                         <li key={idx}>{detail}</li>
                       ))}
                     </ul>
+                    {item.tecnologias && (
+                      <div className={`mt-4 pt-4 border-t border-outline-variant/10 ${isLeft ? 'md:pr-2' : 'pl-2'}`}>
+                        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Tecnologias Utilizadas</span>
+                        <p className="text-sm font-medium text-primary">{item.tecnologias}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
 

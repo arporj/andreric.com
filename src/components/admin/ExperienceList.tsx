@@ -160,16 +160,6 @@ export function ExperienceList() {
             </div>
           </div>
 
-          <div className="space-y-1 mt-4">
-            <label className="text-sm font-medium text-slate-700">Tecnologias Utilizadas</label>
-            <input 
-              value={currentExp?.tecnologias || ''}
-              onChange={e => setCurrentExp({...currentExp, tecnologias: e.target.value})}
-              placeholder="Ex: Utilizado Microsoft Visual Basic 5..."
-              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
-            />
-          </div>
-          
           <div className="space-y-1">
             <label className="text-sm font-medium text-slate-700">Descrição (Uma tarefa por linha)</label>
             <textarea 
@@ -179,6 +169,16 @@ export function ExperienceList() {
               onChange={e => setCurrentExp({...currentExp, descricao: e.target.value as any})}
               placeholder="Desenvolvimento de APIs...\nOtimização de banco de dados..."
               className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary resize-none"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-slate-700">Tecnologias Utilizadas</label>
+            <input 
+              value={currentExp?.tecnologias || ''}
+              onChange={e => setCurrentExp({...currentExp, tecnologias: e.target.value})}
+              placeholder="Ex: Utilizado Microsoft Visual Basic 5..."
+              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-primary focus:border-primary"
             />
           </div>
 
@@ -211,7 +211,21 @@ export function ExperienceList() {
                     {exp.inicio ? exp.inicio.split('-').slice(0, 2).reverse().join('/') : ''} - 
                     {exp.fim ? exp.fim.split('-').slice(0, 2).reverse().join('/') : ' Presente'}
                   </p>
-                  {exp.tecnologias && <p className="text-xs text-slate-400 mt-1">{exp.tecnologias}</p>}
+                  
+                  {exp.descricao && exp.descricao.length > 0 && (
+                    <div className="mt-3 text-sm text-slate-600 space-y-1">
+                      {exp.descricao.slice(0, 2).map((item, i) => (
+                        <p key={i}>• {item}</p>
+                      ))}
+                      {exp.descricao.length > 2 && <p className="text-slate-400 italic">...e mais {exp.descricao.length - 2}</p>}
+                    </div>
+                  )}
+
+                  {exp.tecnologias && (
+                    <div className="mt-2 inline-block px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-md border border-slate-200">
+                      <strong>Tecnologias:</strong> {exp.tecnologias}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleEdit(exp)} className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-full transition-all">

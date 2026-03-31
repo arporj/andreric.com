@@ -49,6 +49,7 @@ export const siteData = {
           "Reduzi os custos operacionais em nuvem em 35% através da otimização de contêineres.",
           "Implementei pipelines de CI/CD que reduziram o tempo de deploy em 60%."
         ],
+        tecnologias: "Docker, Kubernetes, AWS, Terraform",
         align: "right"
       },
       {

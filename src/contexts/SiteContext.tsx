@@ -88,7 +88,8 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               period: `De ${formatarMesAno(exp.inicio)} até ${formatarMesAno(exp.fim)}`,
               role: exp.cargo,
               company: exp.empresa,
-              details: exp.tecnologias ? [...(exp.descricao || []), exp.tecnologias] : (exp.descricao || []),
+              details: exp.descricao || [],
+              tecnologias: exp.tecnologias || null,
               align: i % 2 === 0 ? 'right' : 'left'
             })) : fallbackData.experience.items
           },
