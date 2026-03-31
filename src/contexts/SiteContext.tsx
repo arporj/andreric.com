@@ -75,20 +75,61 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return acc;
         }, []);
 
-        // Skills: se houver tecnologias cadastradas nas experiências, exibir como categoria dinâmica
-        // Se o banco de habilidades tiver dados, usar; senão, usar fallback + techs das experiências
+        // Classificador de tecnologias por categoria
+        const frontendKeywords = [
+          'react', 'next', 'vue', 'angular', 'svelte', 'typescript', 'javascript', 'html', 'css',
+          'tailwind', 'sass', 'styled', 'framer', 'three.js', 'webpack', 'vite', 'figma',
+          'bootstrap', 'material', 'jquery', 'redux', 'zustand', 'graphql client', 'flutter',
+          'ionic', 'expo', 'gatsby', 'nuxt', 'remix', 'astro', 'delphi', 'visual basic', 'vb',
+          'asp.net', 'blazor', 'wpf', 'winforms', 'swing', 'javafx'
+        ];
+        const backendKeywords = [
+          'node', 'python', 'java', 'php', 'ruby', 'go', 'rust', 'c#', '.net', 'laravel',
+          'django', 'flask', 'fastapi', 'spring', 'express', 'nestjs', 'graphql', 'rest',
+          'postgres', 'mysql', 'sql', 'mongodb', 'redis', 'supabase', 'firebase', 'prisma',
+          'sequelize', 'typeorm', 'api', 'backend', 'microservice', 'rabbitmq', 'kafka',
+          'socket', 'websocket', 'auth', 'jwt', 'oauth', 'stripe', 'access', 'oracle', 'sql server'
+        ];
+        const infraKeywords = [
+          'docker', 'kubernetes', 'aws', 'gcp', 'azure', 'terraform', 'ci/cd', 'github actions',
+          'jenkins', 'ansible', 'nginx', 'linux', 'bash', 'git', 'vercel', 'netlify', 'heroku',
+          'cloudflare', 'monitoring', 'datadog', 'prometheus', 'grafana', 'elk', 'devops',
+          'k8s', 'helm', 'pulumi', 'cloud', 'deploy', 'pipeline', 'agile', 'scrum'
+        ];
+
+        const classifyTech = (tech: string): 'frontend' | 'backend' | 'infrastructure' | null => {
+          const lower = tech.toLowerCase();
+          if (frontendKeywords.some(k => lower.includes(k))) return 'frontend';
+          if (backendKeywords.some(k => lower.includes(k))) return 'backend';
+          if (infraKeywords.some(k => lower.includes(k))) return 'infrastructure';
+          return null;
+        };
+
+        // Distribuir as tecnologias nas categorias existentes
+        const techByCategory: Record<string, string[]> = { frontend: [], backend: [], infrastructure: [] };
+        const unclassified: string[] = [];
+        allTechs.forEach(tech => {
+          const cat = classifyTech(tech);
+          if (cat) techByCategory[cat].push(tech);
+          else unclassified.push(tech);
+        });
+
+        // Enriquecer as categorias base com as tecnologias classificadas
         const baseCategories = mappedCategories.length > 0 ? mappedCategories : fallbackData.skills.categories;
-        const enrichedCategories = allTechs.length > 0
-          ? [
-              ...baseCategories,
-              {
-                id: 'exp-tech',
-                icon: 'code',
-                title: 'Tecnologias das Experiências',
-                tags: allTechs.slice(0, 20)
-              }
-            ]
-          : baseCategories;
+        const enrichedCategories = baseCategories.map(cat => ({
+          ...cat,
+          tags: [...new Set([...cat.tags, ...(techByCategory[cat.id] || [])])]
+        }));
+
+        // Se houver tecnologias não classificadas, adicionar numa categoria extra
+        if (unclassified.length > 0) {
+          enrichedCategories.push({
+            id: 'other-tech',
+            icon: 'devices',
+            title: 'Outras Ferramentas',
+            tags: unclassified
+          });
+        }
 
         // Map everything to match exactly the mockData.ts interface
         const mappedData = {
