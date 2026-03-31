@@ -1,6 +1,6 @@
 export const siteData = {
   header: {
-    logoText: "André Ric",
+    logoText: "André Ricardo",
     navLinks: [
       { label: "Sobre", href: "#about" },
       { label: "Experiência", href: "#experience" },

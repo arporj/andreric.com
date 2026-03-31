@@ -18,16 +18,10 @@ export const Header = () => {
               {link.label}
             </a>
           ))}
-          <a href="/login" className="px-5 py-2 bg-primary text-on-primary rounded-full hover:bg-primary/90 transition-colors">
-            Login
-          </a>
         </div>
         
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-4">
-          <a href="/login" className="px-4 py-1.5 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary/90 transition-colors">
-            Login
-          </a>
           <button className="p-2 text-on-surface-variant">
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>menu</span>
           </button>
