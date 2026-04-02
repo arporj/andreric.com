@@ -203,7 +203,7 @@ export function ExperienceList() {
             experiences.map(exp => (
               <div key={exp.id} className="p-6 flex justify-between items-start hover:bg-slate-50 transition-colors">
                 <div>
-                  <h4 className="font-bold text-slate-800">{exp.cargo} <span className="text-slate-500 font-normal">at</span> {exp.empresa}</h4>
+                  <h4 className="font-bold text-slate-800">{exp.empresa} <span className="text-slate-500 font-normal">—</span> {exp.cargo}</h4>
                   <p className="text-sm text-slate-500 mt-1">
                     {exp.inicio ? exp.inicio.split('-').slice(0, 2).reverse().join('/') : ''} - 
                     {exp.fim ? exp.fim.split('-').slice(0, 2).reverse().join('/') : ' Presente'}
