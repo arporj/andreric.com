@@ -14,7 +14,7 @@ function LoadingScreen() {
       <div className="relative flex flex-col items-center gap-6">
         {/* Logo / Nome */}
         <h1 className="text-3xl md:text-4xl font-bold text-on-surface tracking-tight animate-pulse">
-          André Ric<span className="text-primary">.</span>
+          Currículo André Ricardo<span className="text-primary">.</span>
         </h1>
         
         {/* Barra de progresso animada */}
