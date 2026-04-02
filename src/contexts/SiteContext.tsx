@@ -26,20 +26,34 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           supabase.from('experiencias').select('*').order('inicio', { ascending: false }),
           supabase.from('projetos').select('*').order('destaque', { ascending: false }).order('nome', { ascending: true }),
           supabase.from('habilidades').select('*, categorias_habilidades(*)').order('nome', { ascending: true }),
-          supabase.from('tecnologias_tags').select('*').order('importancia', { ascending: false }).order('nome', { ascending: true })
+          supabase.from('tecnologias_tags').select('*').order('conhecimento', { ascending: false }).order('nome', { ascending: true })
         ]);
 
         const profile = profileRes.data;
         const experiences = expRes.data || [];
         const projects = projRes.data || [];
         const skillsDB = skillsRes.data || [];
-        const tagsRegistry: { nome: string; categoria: string; importancia: number }[] = tagsRes.data || [];
+        const tagsRegistry: { nome: string; categoria: string; conhecimento: number }[] = tagsRes.data || [];
         const tagsMap = new Map(tagsRegistry.map(t => [t.nome.toLowerCase(), t]));
         
         if (!profile) {
           setLoading(false); 
           return; // keep fallback if no profile is configured yet
         }
+
+        // Mapear a data de início da experiência mais recente para cada tecnologia
+        const techRecencyMap = new Map<string, string>(); // tech -> latest_date
+        experiences.forEach(exp => {
+          if (exp.tecnologias && exp.inicio) {
+            const techs = exp.tecnologias.split(',').map((t: string) => t.trim().toLowerCase()).filter(Boolean);
+            techs.forEach((t: string) => {
+              const currentLatest = techRecencyMap.get(t);
+              if (!currentLatest || exp.inicio > currentLatest) {
+                techRecencyMap.set(t, exp.inicio);
+              }
+            });
+          }
+        });
 
         // Map DB skills to mockData categories format
         const catsMap = new Map();
@@ -78,18 +92,18 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           }
 
           const decadaStr = decadas === 1 ? "uma década" : `${decadas} décadas`;
-          const proxDecadaStr = (decadas + 1) === 1 ? "uma década" : `${decadas + 1} décadas`;
+          const proxDecadaStr = (decadas + 1) === 1 ? "uma decade" : `${decadas + 1} décadas`;
 
-          if (resto === 0) return `${decadas} décadas`; // Exato: "3 décadas"
-          if (resto >= 8) return `quase ${proxDecadaStr}`; // Fim: "quase 4 décadas"
-          return `mais de ${decadaStr}`; // Início/Meio: "mais de 3 décadas"
+          if (resto === 0) return `${decadas} décadas`;
+          if (resto >= 8) return `quase ${proxDecadaStr}`;
+          return `mais de ${decadaStr}`;
         };
 
         const textoDecadas = formatarDecadas(anosDeExperiencia);
 
         // Extrair todas as tecnologias únicas das experiências + projetos
         const addUnique = (acc: string[], items: string[]) => {
-          items.forEach(t => { if (t && !acc.includes(t)) acc.push(t); });
+          items.forEach(t => { if (t && !acc.find(x => x.toLowerCase() === t.toLowerCase())) acc.push(t); });
           return acc;
         };
 
@@ -103,7 +117,7 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           }
         });
 
-        // Tags dos projetos (campo tecnologias pode ser string CSV ou array)
+        // Tags dos projetos
         projects.forEach((p: any) => {
           if (!p.tecnologias) return;
           const raw = Array.isArray(p.tecnologias) ? p.tecnologias : p.tecnologias.split(',');
@@ -141,31 +155,38 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return null;
         };
 
-        // Distribuir as tecnologias nas categorias — prioridade: tabela de tags, depois classificador de palavras-chave
-        const techByCategory: Record<string, { nome: string; importancia: number }[]> = { frontend: [], backend: [], infrastructure: [], other: [] };
+        // Distribuir as tecnologias nas categorias
+        const techByCategory: Record<string, { nome: string; conhecimento: number; lastDate: string }[]> = { frontend: [], backend: [], infrastructure: [], other: [] };
         const unclassified: string[] = [];
         allTechs.forEach(tech => {
-          const registered = tagsMap.get(tech.toLowerCase());
+          const techLower = tech.toLowerCase();
+          const registered = tagsMap.get(techLower);
+          const lastDate = techRecencyMap.get(techLower) || '1900-01-01';
+
           if (registered) {
             const cat = registered.categoria in techByCategory ? registered.categoria : 'other';
-            techByCategory[cat].push({ nome: tech, importancia: registered.importancia });
+            techByCategory[cat].push({ nome: tech, conhecimento: registered.conhecimento, lastDate });
           } else {
             const cat = classifyTech(tech);
-            if (cat) techByCategory[cat].push({ nome: tech, importancia: 0 });
+            if (cat) techByCategory[cat].push({ nome: tech, conhecimento: 1, lastDate });
             else unclassified.push(tech);
           }
         });
 
-        // Categorias base sem as tags estáticas — apenas metadados (id, icon, title)
+        // Categorias base
         const baseCategories = mappedCategories.length > 0
           ? mappedCategories.map(cat => ({ ...cat, tags: [] }))
           : fallbackData.skills.categories.map(cat => ({ ...cat, tags: [] }));
 
         const enrichedCategories: { id: string; icon: string; title: string; tags: string[] }[] = baseCategories.map(cat => ({
           ...cat,
-          // Ordenar por importancia desc, depois alfabeticamente
+          // Ordenar por conhecimento desc (estrelas), depois por data de recência desc, depois alfabeticamente
           tags: (techByCategory[cat.id] || [])
-            .sort((a, b) => b.importancia - a.importancia || a.nome.localeCompare(b.nome))
+            .sort((a, b) => 
+              (b.conhecimento - a.conhecimento) || 
+              (b.lastDate.localeCompare(a.lastDate)) || 
+              (a.nome.localeCompare(b.nome))
+            )
             .map(t => t.nome)
         }));
 
