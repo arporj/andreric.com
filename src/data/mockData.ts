@@ -16,7 +16,7 @@ export const siteData = {
     description: "Engenheiro de Software dedicado à precisão, performance e código limpo.",
     primaryCta: { label: "Ver Projetos", href: "#projects" },
     secondaryCta: { label: "Baixar CV", href: "#" },
-    imageSrc: "/images/fotopessoal1.jpg",
+    imageSrc: "/images/fotopessoal.jpg",
     imageAlt: "André Ric Perfil",
     badge: {
       title: "Experiência",
