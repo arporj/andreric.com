@@ -16,7 +16,7 @@ export const siteData = {
     description: "Engenheiro de Software dedicado à precisão, performance e código limpo.",
     primaryCta: { label: "Ver Projetos", href: "#projects" },
     secondaryCta: { label: "Baixar CV", href: "#" },
-    imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuDmtTPlURA3p-Uya3sv-2_PawK1R8weFfA6r5U5vOfpXznovdQ4MtcxITsrl2mEbFlr0kagJxy2jHLRbRMxlvVuazrJV1I_khsL4yz5yB0Fgd-zkphSTBsRmnK51D-t3Ih8pObb21L7GlpuHq_8I2tbDLr7dODo9DW_ZHGc3yUBj-S5yPNGRQgFcNwvEv-IS7wE7OJnUVzmLmisCkjb0s16NeNVheKijWWVrmbuuMwpkl4fLzj8qIIZQYShi-vih4om2gfA3dyuHETa",
+    imageSrc: "/images/fotopessoal.jpg",
     imageAlt: "André Ric Perfil",
     badge: {
       title: "Experiência",
