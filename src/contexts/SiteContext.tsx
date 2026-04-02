@@ -101,83 +101,25 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         const textoDecadas = formatarDecadas(anosDeExperiencia);
 
-        // Extrair todas as tecnologias únicas das experiências + projetos
-        const addUnique = (acc: string[], items: string[]) => {
-          items.forEach(t => { if (t && !acc.find(x => x.toLowerCase() === t.toLowerCase())) acc.push(t); });
-          return acc;
-        };
-
         const allTechs: string[] = [];
         
-        // Incluir todas as tags explicitamente registradas no banco
+        // Usar EXCLUSIVAMENTE as tags registradas no banco
         tagsMap.forEach(tag => {
-          if (!allTechs.some(t => t.toLowerCase() === tag.nome.toLowerCase())) {
-            allTechs.push(tag.nome);
-          }
+          allTechs.push(tag.nome);
         });
 
-        // Tags das experiências
-        experiences.forEach((exp: any) => {
-          if (exp.tecnologias) {
-            const techs = exp.tecnologias.split(',').map((t: string) => t.trim()).filter(Boolean);
-            addUnique(allTechs, techs);
-          }
-        });
-
-        // Tags dos projetos
-        projects.forEach((p: any) => {
-          if (!p.tecnologias) return;
-          const raw = Array.isArray(p.tecnologias) ? p.tecnologias : p.tecnologias.split(',');
-          const techs = raw.map((t: string) => t.trim()).filter(Boolean);
-          addUnique(allTechs, techs);
-        });
-
-        // Classificador de tecnologias por categoria
-        const frontendKeywords = [
-          'react', 'next', 'vue', 'angular', 'svelte', 'typescript', 'javascript', 'html', 'css',
-          'tailwind', 'sass', 'styled', 'framer', 'three.js', 'webpack', 'vite', 'figma',
-          'bootstrap', 'material', 'jquery', 'redux', 'zustand', 'graphql client', 'flutter',
-          'ionic', 'expo', 'gatsby', 'nuxt', 'remix', 'astro', 'delphi', 'visual basic', 'vb',
-          'asp.net', 'blazor', 'wpf', 'winforms', 'swing', 'javafx'
-        ];
-        const backendKeywords = [
-          'node', 'python', 'java', 'php', 'ruby', 'go', 'rust', 'c#', '.net', 'laravel',
-          'django', 'flask', 'fastapi', 'spring', 'express', 'nestjs', 'graphql', 'rest',
-          'postgres', 'mysql', 'sql', 'mongodb', 'redis', 'supabase', 'firebase', 'prisma',
-          'sequelize', 'typeorm', 'api', 'backend', 'microservice', 'rabbitmq', 'kafka',
-          'socket', 'websocket', 'auth', 'jwt', 'oauth', 'stripe', 'access', 'oracle', 'sql server'
-        ];
-        const infraKeywords = [
-          'docker', 'kubernetes', 'aws', 'gcp', 'azure', 'terraform', 'ci/cd', 'github actions',
-          'jenkins', 'ansible', 'nginx', 'linux', 'bash', 'git', 'vercel', 'netlify', 'heroku',
-          'cloudflare', 'monitoring', 'datadog', 'prometheus', 'grafana', 'elk', 'devops',
-          'k8s', 'helm', 'pulumi', 'cloud', 'deploy', 'pipeline', 'agile', 'scrum'
-        ];
-
-        const classifyTech = (tech: string): 'frontend' | 'backend' | 'infrastructure' | null => {
-          const lower = tech.toLowerCase();
-          if (frontendKeywords.some(k => lower.includes(k))) return 'frontend';
-          if (backendKeywords.some(k => lower.includes(k))) return 'backend';
-          if (infraKeywords.some(k => lower.includes(k))) return 'infrastructure';
-          return null;
+        // Distribuir as tecnologias nas categorias com base no banco
+        const techByCategory: Record<string, { nome: string; conhecimento: number; lastDate: string }[]> = { 
+          frontend: [], backend: [], infrastructure: [], other: [] 
         };
 
-        // Distribuir as tecnologias nas categorias
-        const techByCategory: Record<string, { nome: string; conhecimento: number; lastDate: string }[]> = { frontend: [], backend: [], infrastructure: [], other: [] };
-        const unclassified: string[] = [];
         allTechs.forEach(tech => {
           const techLower = tech.toLowerCase();
-          const registered = tagsMap.get(techLower);
+          const registered = tagsMap.get(techLower)!; // Garantido que existe pois veio do tagsMap
           const lastDate = techRecencyMap.get(techLower) || '1900-01-01';
 
-          if (registered) {
-            const cat = registered.categoria in techByCategory ? registered.categoria : 'other';
-            techByCategory[cat].push({ nome: tech, conhecimento: registered.conhecimento, lastDate });
-          } else {
-            const cat = classifyTech(tech);
-            if (cat) techByCategory[cat].push({ nome: tech, conhecimento: 1, lastDate });
-            else unclassified.push(tech);
-          }
+          const cat = registered.categoria in techByCategory ? registered.categoria : 'other';
+          techByCategory[cat].push({ nome: tech, conhecimento: registered.conhecimento, lastDate });
         });
 
         // Categorias base
@@ -197,11 +139,8 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             .map(t => t.nome)
         }));
 
-        // Combinar techByCategory['other'] (que já estão estruturadas) com unclassified (que são apenas strings)
-        const othersMapped = [
-          ...techByCategory['other'],
-          ...unclassified.map(tech => ({ nome: tech, conhecimento: 0, lastDate: '1900-01-01' }))
-        ];
+        // Se houver tecnologias registradas como 'other', adicionar numa categoria extra
+        const othersMapped = techByCategory['other'] || [];
 
         if (othersMapped.length > 0) {
           enrichedCategories.push({
