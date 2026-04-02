@@ -37,7 +37,7 @@ export const Hero = () => {
           <div className="aspect-square rounded-xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
             <img 
               alt={hero.imageAlt} 
-              className="w-full h-full object-cover" 
+              className="w-full h-full object-contain object-top" 
               src={hero.imageSrc} 
             />
           </div>
