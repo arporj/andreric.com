@@ -53,7 +53,9 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
     }
     const lower = inputText.toLowerCase();
     const filtered = allTags.filter(
-      t => t.nome.toLowerCase().includes(lower) && !selected.includes(t.nome)
+      t =>
+        t.nome.toLowerCase().includes(lower) &&
+        !selected.some(s => s.toLowerCase() === t.nome.toLowerCase())
     );
     setSuggestions(filtered);
     setShowDropdown(true);
@@ -79,7 +81,9 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
 
   const addTag = async (nome: string) => {
     const trimmed = nome.trim();
-    if (!trimmed || selected.includes(trimmed)) return;
+    if (!trimmed) return;
+    // Case-insensitive duplicate check
+    if (selected.some(s => s.toLowerCase() === trimmed.toLowerCase())) return;
 
     // Check if it doesn't exist in DB → create it without classification
     const exists = allTags.find(t => t.nome.toLowerCase() === trimmed.toLowerCase());
@@ -92,9 +96,9 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
       if (data) setAllTags(prev => [...prev, data]);
     }
 
-    const newSelected = [...selected, exists ? exists.nome : trimmed];
-    setSelected(newSelected);
-    emitChange(newSelected);
+    const realName = exists ? exists.nome : trimmed;
+    setSelected(prev => [...prev, realName]);
+    onChange([...selected, realName].join(', '));
     setInputText('');
     setSuggestions([]);
     setShowDropdown(false);
@@ -164,7 +168,6 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
         />
       </div>
 
-      {/* Dropdown */}
       {showDropdown && (
         <div
           ref={dropdownRef}
@@ -176,7 +179,7 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
                 <button
                   key={tag.id}
                   type="button"
-                  onMouseDown={() => addTag(tag.nome)}
+                  onMouseDown={e => { e.preventDefault(); addTag(tag.nome); }}
                   className="w-full flex items-center justify-between px-3 py-2 hover:bg-slate-50 transition-colors text-left"
                 >
                   <span className="text-sm font-medium text-slate-800">{tag.nome}</span>
@@ -185,15 +188,17 @@ export function TagInput({ value, onChange, placeholder = 'Adicione tecnologias.
                   </span>
                 </button>
               ))
-            ) : (
+            ) : !selected.some(s => s.toLowerCase() === inputText.trim().toLowerCase()) ? (
               <button
                 type="button"
-                onMouseDown={() => addTag(inputText)}
+                onMouseDown={e => { e.preventDefault(); addTag(inputText); }}
                 className="w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-50 text-left text-sm text-slate-600"
               >
                 <span className="material-symbols-outlined text-[16px] text-primary">add_circle</span>
                 Adicionar <strong className="text-slate-800">"{inputText.trim()}"</strong> como nova tecnologia
               </button>
+            ) : (
+              <div className="px-3 py-2 text-xs text-slate-400 italic">Já adicionada</div>
             )}
           </div>
         </div>
