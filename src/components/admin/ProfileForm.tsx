@@ -19,7 +19,9 @@ export function ProfileForm() {
     foto_url: '',
     linkedin_url: '',
     github_url: '',
-    site_url: ''
+    site_url: '',
+    data_nascimento: '',
+    endereco: ''
   });
 
   useEffect(() => {
@@ -173,6 +175,40 @@ export function ProfileForm() {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" 
             />
+          </div>
+        </div>
+
+        {/* Seção: Dados para CV/PDF */}
+        <div className="space-y-4 pt-4 border-t border-slate-100">
+          <div>
+            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Dados para CV / PDF</h4>
+            <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+              <span className="material-symbols-outlined text-[14px]">info</span>
+              Estes campos não aparecem no site público, mas serão usados na geração do PDF do currículo.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Data de Nascimento</label>
+              <input
+                type="date"
+                name="data_nascimento"
+                value={formData.data_nascimento || ''}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Endereço de Moradia</label>
+              <input
+                name="endereco"
+                value={formData.endereco || ''}
+                onChange={handleChange}
+                placeholder="Ex: Rua das Flores, 123 – São Paulo, SP"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+              />
+            </div>
           </div>
         </div>
 
