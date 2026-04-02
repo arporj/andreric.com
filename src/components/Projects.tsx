@@ -13,9 +13,11 @@ export const Projects = () => {
             <h2 className="text-[1.75rem] font-bold text-on-surface tracking-tight">{projects.title}</h2>
             <p className="text-on-surface-variant max-w-xl text-lg">{projects.subtitle}</p>
           </div>
-          <a className="text-primary font-bold hover:underline underline-offset-8 transition-all" href={projects.viewAllLink}>
-            View All Work →
-          </a>
+          {projects.items.length > 2 && (
+            <a className="text-primary font-bold hover:underline underline-offset-8 transition-all" href={projects.viewAllLink}>
+              Ver todos os projetos →
+            </a>
+          )}
         </div>
         
         <div className="grid md:grid-cols-2 gap-12">
@@ -43,7 +45,7 @@ export const Projects = () => {
                 </p>
                 <div className="flex gap-6 pt-2">
                   <a className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href={project.demoLink}>
-                    <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>open_in_new</span> Live Demo
+                    <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>open_in_new</span> Demo Ao Vivo
                   </a>
                   <a className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors" href={project.githubLink}>
                     <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24", verticalAlign: "middle" }}>terminal</span> GitHub
