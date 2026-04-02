@@ -69,6 +69,24 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ? new Date().getFullYear() - new Date(experiences[experiences.length - 1].inicio).getFullYear() 
           : 0;
 
+        const formatarDecadas = (anos: number) => {
+          const decadas = Math.floor(anos / 10);
+          const resto = anos % 10;
+          
+          if (anos < 10) {
+            return anos >= 8 ? "quase uma década" : `${anos} anos`;
+          }
+
+          const decadaStr = decadas === 1 ? "uma década" : `${decadas} décadas`;
+          const proxDecadaStr = (decadas + 1) === 1 ? "uma década" : `${decadas + 1} décadas`;
+
+          if (resto === 0) return `${decadas} décadas`; // Exato: "3 décadas"
+          if (resto >= 8) return `quase ${proxDecadaStr}`; // Fim: "quase 4 décadas"
+          return `mais de ${decadaStr}`; // Início/Meio: "mais de 3 décadas"
+        };
+
+        const textoDecadas = formatarDecadas(anosDeExperiencia);
+
         // Extrair todas as tecnologias únicas das experiências + projetos
         const addUnique = (acc: string[], items: string[]) => {
           items.forEach(t => { if (t && !acc.includes(t)) acc.push(t); });
@@ -177,6 +195,9 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           },
           about: {
             ...fallbackData.about,
+            paragraphs: fallbackData.about.paragraphs.map((p, i) => 
+              i === 1 ? p.replace(/Com (quase uma década|mais de \d+ décadas|quase \d+ décadas|\d+ décadas)/, `Com ${textoDecadas}`) : p
+            ),
             facts: [
               { label: 'Localização', value: profile.cidade ? `${profile.cidade}, ${profile.pais}` : fallbackData.about.facts[0].value },
               { label: 'E-mail', value: profile.email || 'Não informado', href: profile.email ? `mailto:${profile.email}` : undefined },
