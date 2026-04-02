@@ -108,6 +108,13 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         };
 
         const allTechs: string[] = [];
+        
+        // Incluir todas as tags explicitamente registradas no banco
+        tagsMap.forEach(tag => {
+          if (!allTechs.some(t => t.toLowerCase() === tag.nome.toLowerCase())) {
+            allTechs.push(tag.nome);
+          }
+        });
 
         // Tags das experiências
         experiences.forEach((exp: any) => {
@@ -190,13 +197,24 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             .map(t => t.nome)
         }));
 
-        // Se houver tecnologias não classificadas, adicionar numa categoria extra
-        if (unclassified.length > 0) {
+        // Combinar techByCategory['other'] (que já estão estruturadas) com unclassified (que são apenas strings)
+        const othersMapped = [
+          ...techByCategory['other'],
+          ...unclassified.map(tech => ({ nome: tech, conhecimento: 0, lastDate: '1900-01-01' }))
+        ];
+
+        if (othersMapped.length > 0) {
           enrichedCategories.push({
             id: 'other-tech',
             icon: 'devices',
             title: 'Outras Ferramentas',
-            tags: unclassified
+            tags: othersMapped
+              .sort((a, b) => 
+                (b.conhecimento - a.conhecimento) || 
+                (b.lastDate.localeCompare(a.lastDate)) || 
+                (a.nome.localeCompare(b.nome))
+              )
+              .map(t => t.nome)
           });
         }
 
