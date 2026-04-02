@@ -3,6 +3,47 @@ import { useSiteData } from '../contexts/SiteContext';
 
 const INITIAL_VISIBLE = 3;
 
+/**
+ * Parser inteligente de detalhes de experiência.
+ * Detecta dois formatos:
+ * 1. Lista simples (todas as linhas são atividades)
+ * 2. Lista agrupada (linhas sem "-" no início = título de projeto/cliente,
+ *    linhas com "-" = atividades daquele projeto)
+ */
+type ParsedGroup = { title: string | null; activities: string[] };
+
+const parseDetails = (details: string[]): ParsedGroup[] => {
+  const groups: ParsedGroup[] = [];
+  let currentGroup: ParsedGroup | null = null;
+
+  for (const line of details) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    const isActivity = trimmed.startsWith('-') || trimmed.startsWith('•');
+
+    if (isActivity) {
+      // Remove o marcador "-" ou "•" do início
+      const cleanActivity = trimmed.replace(/^[-•]\s*/, '');
+      if (!currentGroup) {
+        // Atividades sem título — formato lista simples
+        currentGroup = { title: null, activities: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.activities.push(cleanActivity);
+    } else {
+      // É um título de projeto/cliente
+      currentGroup = { title: trimmed, activities: [] };
+      groups.push(currentGroup);
+    }
+  }
+
+  return groups;
+};
+
+const hasProjectHeaders = (groups: ParsedGroup[]): boolean =>
+  groups.some(g => g.title !== null);
+
 export const Experience = () => {
   const { siteData } = useSiteData();
   const { experience } = siteData;
@@ -27,6 +68,9 @@ export const Experience = () => {
           <div className="space-y-12">
             {visibleItems.map((item) => {
               const isLeft = item.align === 'left';
+              const parsedGroups = parseDetails(item.details);
+              const isGrouped = hasProjectHeaders(parsedGroups);
+
               return (
                 <div key={item.id} className="relative pl-8 md:pl-0 md:flex items-center justify-between group">
                   
@@ -42,11 +86,42 @@ export const Experience = () => {
                       <span className="md:hidden text-xs font-bold text-primary uppercase block mb-2">{item.period}</span>
                       <h3 className="font-bold text-primary">{item.company}</h3>
                       <p className="text-on-surface font-medium mb-4">{item.role}</p>
-                      <ul className={`space-y-2 text-on-surface-variant text-sm ${isLeft ? 'md:list-none space-y-2' : 'list-disc list-inside'}`}>
-                        {item.details.map((detail, idx) => (
-                          <li key={idx}>{detail}</li>
-                        ))}
-                      </ul>
+
+                      {isGrouped ? (
+                        /* Formato agrupado: múltiplos projetos/clientes */
+                        <div className="space-y-4">
+                          {parsedGroups.map((group, gIdx) => (
+                            <div key={gIdx}>
+                              {group.title && (
+                                <div className={`flex items-center gap-2 mb-2 ${isLeft ? 'md:justify-end' : ''}`}>
+                                  <span
+                                    className="material-symbols-outlined text-primary text-sm"
+                                    style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20" }}
+                                  >
+                                    folder_open
+                                  </span>
+                                  <span className="text-sm font-semibold text-on-surface">{group.title}</span>
+                                </div>
+                              )}
+                              {group.activities.length > 0 && (
+                                <ul className={`space-y-1 text-on-surface-variant text-sm ${isLeft ? 'md:list-none md:pr-5' : 'list-disc list-inside pl-5'}`}>
+                                  {group.activities.map((act, aIdx) => (
+                                    <li key={aIdx}>{act}</li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        /* Formato simples: lista plana de atividades */
+                        <ul className={`space-y-2 text-on-surface-variant text-sm ${isLeft ? 'md:list-none space-y-2' : 'list-disc list-inside'}`}>
+                          {parsedGroups.flatMap(g => g.activities).map((activity, idx) => (
+                            <li key={idx}>{activity}</li>
+                          ))}
+                        </ul>
+                      )}
+
                       {item.tecnologias && (
                         <div className={`mt-4 pt-4 border-t border-outline-variant/10 ${isLeft ? 'md:pr-2' : 'pl-2'}`}>
                           <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-3">Tecnologias Utilizadas</span>
