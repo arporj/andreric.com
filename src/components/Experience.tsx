@@ -5,33 +5,52 @@ const INITIAL_VISIBLE = 3;
 
 /**
  * Parser inteligente de detalhes de experiência.
- * Detecta dois formatos:
- * 1. Lista simples (todas as linhas são atividades)
- * 2. Lista agrupada (linhas sem "-" no início = título de projeto/cliente,
- *    linhas com "-" = atividades daquele projeto)
+ * Detecta três níveis:
+ * 1. Grupo (sem "-" = título de projeto/cliente)
+ * 2. Atividade ("-" = bullet principal)
+ * 3. Sub-atividade ("--" = bullet aninhado)
  */
-type ParsedGroup = { title: string | null; activities: string[] };
+type Activity = { text: string; subActivities: string[] };
+type ParsedGroup = { title: string | null; activities: Activity[] };
 
 const parseDetails = (details: string[]): ParsedGroup[] => {
   const groups: ParsedGroup[] = [];
   let currentGroup: ParsedGroup | null = null;
+  let lastActivity: Activity | null = null;
 
   for (const line of details) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    const isActivity = trimmed.startsWith('-') || trimmed.startsWith('•');
+    const isSubActivity = trimmed.startsWith('--');
+    const isActivity = !isSubActivity && (trimmed.startsWith('-') || trimmed.startsWith('•'));
 
-    if (isActivity) {
+    if (isSubActivity) {
+      const cleanSub = trimmed.replace(/^--\s*/, '');
+      if (lastActivity) {
+        lastActivity.subActivities.push(cleanSub);
+      } else {
+        // Fallback caso comece com -- sem ter um item pai
+        if (!currentGroup) {
+          currentGroup = { title: null, activities: [] };
+          groups.push(currentGroup);
+        }
+        const orphanedActivity = { text: cleanSub, subActivities: [] };
+        currentGroup.activities.push(orphanedActivity);
+        lastActivity = orphanedActivity;
+      }
+    } else if (isActivity) {
       const cleanActivity = trimmed.replace(/^[-•]\s*/, '');
       if (!currentGroup) {
         currentGroup = { title: null, activities: [] };
         groups.push(currentGroup);
       }
-      currentGroup.activities.push(cleanActivity);
+      lastActivity = { text: cleanActivity, subActivities: [] };
+      currentGroup.activities.push(lastActivity);
     } else {
       currentGroup = { title: trimmed, activities: [] };
       groups.push(currentGroup);
+      lastActivity = null;
     }
   }
 
@@ -106,11 +125,23 @@ export const Experience = () => {
                               </div>
                             )}
                             {group.activities.length > 0 && (
-                              <ul className="space-y-1.5 text-on-surface-variant text-sm leading-relaxed ml-6">
+                              <ul className="space-y-3 text-on-surface-variant text-sm leading-relaxed ml-6">
                                 {group.activities.map((act, aIdx) => (
-                                  <li key={aIdx} className="flex items-start gap-2">
-                                    <span className="text-primary mt-[7px] shrink-0 block w-1.5 h-1.5 rounded-full bg-primary/60" />
-                                    <span>{act}</span>
+                                  <li key={aIdx} className="space-y-2">
+                                    <div className="flex items-start gap-2">
+                                      <span className="text-primary mt-[7px] shrink-0 block w-1.5 h-1.5 rounded-full bg-primary/60" />
+                                      <span>{act.text}</span>
+                                    </div>
+                                    {act.subActivities.length > 0 && (
+                                      <ul className="space-y-1.5 ml-6 border-l border-outline-variant/20 pl-4">
+                                        {act.subActivities.map((sub, sIdx) => (
+                                          <li key={sIdx} className="flex items-start gap-2 text-on-surface-variant/80 text-[0.85rem]">
+                                            <span className="mt-[6px] shrink-0 block w-1 h-px bg-on-surface-variant/30" />
+                                            <span>{sub}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    )}
                                   </li>
                                 ))}
                               </ul>
@@ -119,11 +150,23 @@ export const Experience = () => {
                         ))}
                       </div>
                     ) : (
-                      <ul className="space-y-2 text-on-surface-variant text-sm leading-relaxed">
-                        {parsedGroups.flatMap(g => g.activities).map((activity, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <span className="mt-[7px] shrink-0 block w-1.5 h-1.5 rounded-full bg-primary/60" />
-                            <span>{activity}</span>
+                      <ul className="space-y-4 text-on-surface-variant text-sm leading-relaxed">
+                        {parsedGroups.flatMap(g => g.activities).map((act, idx) => (
+                          <li key={idx} className="space-y-2">
+                            <div className="flex items-start gap-2">
+                              <span className="mt-[7px] shrink-0 block w-1.5 h-1.5 rounded-full bg-primary/60" />
+                              <span>{act.text}</span>
+                            </div>
+                            {act.subActivities.length > 0 && (
+                              <ul className="space-y-1.5 ml-6 border-l border-outline-variant/20 pl-4">
+                                {act.subActivities.map((sub, sIdx) => (
+                                  <li key={sIdx} className="flex items-start gap-2 text-on-surface-variant/80 text-[0.85rem]">
+                                    <span className="mt-[6px] shrink-0 block w-1 h-px bg-on-surface-variant/30" />
+                                    <span>{sub}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
                           </li>
                         ))}
                       </ul>
