@@ -1,10 +1,12 @@
 import { useSiteData } from '../contexts/SiteContext';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { usePDF } from '@react-pdf/renderer';
 import { ResumePDF } from './pdf/ResumePDF';
 
 export const Hero = () => {
   const { siteData } = useSiteData();
   const { hero } = siteData;
+
+  const [instance] = usePDF({ document: <ResumePDF data={siteData} /> });
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 px-8 overflow-hidden">
@@ -27,13 +29,18 @@ export const Hero = () => {
               {hero.primaryCta.label}
             </a>
             
-            <PDFDownloadLink 
-              document={<ResumePDF data={siteData} />} 
-              fileName="Curriculo_Andre_Ricardo.pdf"
-              className="px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium hover:bg-surface-container-low transition-all duration-300 inline-block"
+            <a 
+              href={instance.url || '#'} 
+              download="Curriculo_Andre_Ricardo.pdf"
+              className={`px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium transition-all duration-300 inline-block ${instance.loading || !instance.url ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'}`}
+              onClick={(e) => {
+                if (instance.loading || !instance.url) {
+                  e.preventDefault();
+                }
+              }}
             >
-              {({ loading }) => (loading ? 'Gerando CV...' : hero.secondaryCta.label)}
-            </PDFDownloadLink>
+              {instance.loading ? 'Gerando CV...' : hero.secondaryCta.label}
+            </a>
 
           </div>
         </div>
