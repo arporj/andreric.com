@@ -1,7 +1,6 @@
 import { useSiteData } from '../contexts/SiteContext';
 import { usePDF } from '@react-pdf/renderer';
 import { ResumePDF } from './pdf/ResumePDF';
-import { saveAs } from 'file-saver';
 
 export const Hero = () => {
   const { siteData } = useSiteData();
@@ -35,8 +34,19 @@ export const Hero = () => {
                 e.preventDefault();
                 if (instance.loading || !instance.blob) return;
 
-                // Força o salvamento via interceptação nativa file-saver (compatibilidade extrema multiplataforma)
-                saveAs(instance.blob, 'Curriculo_Andre_Ricardo.pdf');
+                // Converte o blob em um Base64 Data URI, bypassing a engine de blob URL do Chrome
+                const reader = new FileReader();
+                reader.readAsDataURL(instance.blob);
+                reader.onloadend = () => {
+                  const base64data = reader.result as string;
+                  const link = document.createElement('a');
+                  link.style.display = 'none';
+                  link.href = base64data;
+                  link.download = 'Curriculo_Andre_Ricardo.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                };
               }}
               disabled={instance.loading || !instance.blob}
             >
