@@ -28,19 +28,34 @@ export const Hero = () => {
             >
               {hero.primaryCta.label}
             </a>
-            
-            <a 
-              href={instance.url || '#'} 
-              download="Curriculo_Andre_Ricardo.pdf"
-              className={`px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium transition-all duration-300 inline-block ${instance.loading || !instance.url ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'}`}
+            <button
+              className={`px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium transition-all duration-300 inline-block ${instance.loading || !instance.blob ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'}`}
               onClick={(e) => {
-                if (instance.loading || !instance.url) {
-                  e.preventDefault();
-                }
+                e.preventDefault();
+                if (instance.loading || !instance.blob) return;
+
+                // Garante que o blob contenha o mime type application/pdf 
+                const pdfBlob = new Blob([instance.blob], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(pdfBlob);
+                
+                // Forçamento programático do download
+                const link = document.createElement('a');
+                link.style.display = 'none';
+                link.href = url;
+                link.download = 'Curriculo_Andre_Ricardo.pdf';
+                document.body.appendChild(link);
+                link.click();
+                
+                // Cleanup para limpar a memória
+                setTimeout(() => {
+                  document.body.removeChild(link);
+                  window.URL.revokeObjectURL(url);
+                }, 100);
               }}
+              disabled={instance.loading || !instance.blob}
             >
               {instance.loading ? 'Gerando CV...' : hero.secondaryCta.label}
-            </a>
+            </button>
 
           </div>
         </div>
