@@ -14,25 +14,26 @@ export const Hero = () => {
     
     setIsGenerating(true);
     try {
-      // Usaremos array puro no URI para contornar qualquer tag Blobs de Chrome local:
-      const blob = await pdf(<ResumePDF data={siteData} />).toBlob();
+      // 1. Gera o Blob PDF
+      const pdfBlob = await pdf(<ResumePDF data={siteData} />).toBlob();
       
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const base64data = reader.result as string;
-        const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = base64data;
-        link.download = 'Curriculo_Andre_Ricardo.pdf';
-        
-        document.body.appendChild(link);
-        link.click();
-        
-        setTimeout(() => {
-          document.body.removeChild(link);
-        }, 500);
-      };
+      // 2. MÁGICA FINAL: Converter para binary stream para cegar o Chromium PDF Viewer
+      const downloadBlob = new Blob([pdfBlob], { type: 'application/octet-stream' });
+      const blobUrl = URL.createObjectURL(downloadBlob);
+      
+      // 3. Forçar o nome do arquivo no anchor virtual
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = blobUrl;
+      link.download = 'Curriculo_Andre_Ricardo.pdf';
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      }, 500);
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
     } finally {

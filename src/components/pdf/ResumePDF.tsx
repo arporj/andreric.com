@@ -165,13 +165,11 @@ export const ResumePDF = ({ data }: { data: any }) => (
       {/* Coluna da Esquerda (Sidebar) */}
       <View style={styles.sidebar}>
         
-        {/* Foto desabilitada para debug
         {data.hero.imageSrc && (
           <View style={styles.photoContainer}>
-            <Image src={data.hero.imageSrc} style={styles.photo} />
+            <Image src={typeof window !== 'undefined' ? `${window.location.origin}${data.hero.imageSrc}` : data.hero.imageSrc} style={styles.photo} />
           </View>
         )}
-        */}
 
         <View style={styles.sidebarSection}>
           <Text style={styles.sidebarTitle}>Contato</Text>
