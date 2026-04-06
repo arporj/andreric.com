@@ -1,6 +1,7 @@
 import { useSiteData } from '../contexts/SiteContext';
 import { usePDF } from '@react-pdf/renderer';
 import { ResumePDF } from './pdf/ResumePDF';
+import { saveAs } from 'file-saver';
 
 export const Hero = () => {
   const { siteData } = useSiteData();
@@ -34,23 +35,8 @@ export const Hero = () => {
                 e.preventDefault();
                 if (instance.loading || !instance.blob) return;
 
-                // Garante que o blob contenha o mime type application/pdf 
-                const pdfBlob = new Blob([instance.blob], { type: 'application/pdf' });
-                const url = window.URL.createObjectURL(pdfBlob);
-                
-                // Forçamento programático do download
-                const link = document.createElement('a');
-                link.style.display = 'none';
-                link.href = url;
-                link.download = 'Curriculo_Andre_Ricardo.pdf';
-                document.body.appendChild(link);
-                link.click();
-                
-                // Cleanup para limpar a memória
-                setTimeout(() => {
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
-                }, 100);
+                // Força o salvamento via interceptação nativa file-saver (compatibilidade extrema multiplataforma)
+                saveAs(instance.blob, 'Curriculo_Andre_Ricardo.pdf');
               }}
               disabled={instance.loading || !instance.blob}
             >
