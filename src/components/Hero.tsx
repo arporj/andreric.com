@@ -1,12 +1,44 @@
+import { useState } from 'react';
 import { useSiteData } from '../contexts/SiteContext';
-import { usePDF } from '@react-pdf/renderer';
+import { pdf } from '@react-pdf/renderer';
 import { ResumePDF } from './pdf/ResumePDF';
 
 export const Hero = () => {
   const { siteData } = useSiteData();
   const { hero } = siteData;
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const [instance] = usePDF({ document: <ResumePDF data={siteData} /> });
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isGenerating) return;
+    
+    setIsGenerating(true);
+    try {
+      // Gera o Blob dinamicamente apenas quando o usuário deseja baixar o PDF (Evita bugs de ciclo de vida e nomes bizarros do Chrome)
+      const blob = await pdf(<ResumePDF data={siteData} />).toBlob();
+      
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const base64data = reader.result as string;
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = base64data;
+        link.download = 'Curriculo_Andre_Ricardo.pdf';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        setTimeout(() => {
+          document.body.removeChild(link);
+        }, 500);
+      };
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center pt-20 px-8 overflow-hidden">
@@ -29,28 +61,11 @@ export const Hero = () => {
               {hero.primaryCta.label}
             </a>
             <button
-              className={`px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium transition-all duration-300 inline-block ${instance.loading || !instance.blob ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'}`}
-              onClick={(e) => {
-                e.preventDefault();
-                if (instance.loading || !instance.blob) return;
-
-                // Converte o blob em um Base64 Data URI, bypassing a engine de blob URL do Chrome
-                const reader = new FileReader();
-                reader.readAsDataURL(instance.blob);
-                reader.onloadend = () => {
-                  const base64data = reader.result as string;
-                  const link = document.createElement('a');
-                  link.style.display = 'none';
-                  link.href = base64data;
-                  link.download = 'Curriculo_Andre_Ricardo.pdf';
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                };
-              }}
-              disabled={instance.loading || !instance.blob}
+              className={`px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium transition-all duration-300 inline-block ${isGenerating ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-container-low'}`}
+              onClick={handleDownload}
+              disabled={isGenerating}
             >
-              {instance.loading ? 'Gerando CV...' : hero.secondaryCta.label}
+              {isGenerating ? 'Gerando CV...' : hero.secondaryCta.label}
             </button>
 
           </div>
