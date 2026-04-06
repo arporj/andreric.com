@@ -1,4 +1,6 @@
 import { useSiteData } from '../contexts/SiteContext';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ResumePDF } from './pdf/ResumePDF';
 
 export const Hero = () => {
   const { siteData } = useSiteData();
@@ -17,19 +19,22 @@ export const Hero = () => {
               {hero.description}
             </p>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 items-center">
             <a 
               className="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-medium shadow-lg hover:-translate-y-1 transition-all duration-300 inline-block" 
               href={hero.primaryCta.href}
             >
               {hero.primaryCta.label}
             </a>
-            <a 
-              href={hero.secondaryCta.href}
+            
+            <PDFDownloadLink 
+              document={<ResumePDF data={siteData} />} 
+              fileName="Curriculo_Andre_Ricardo.pdf"
               className="px-8 py-4 border border-outline-variant border-opacity-20 text-primary rounded-full font-medium hover:bg-surface-container-low transition-all duration-300 inline-block"
             >
-              {hero.secondaryCta.label}
-            </a>
+              {({ loading }) => (loading ? 'Gerando CV...' : hero.secondaryCta.label)}
+            </PDFDownloadLink>
+
           </div>
         </div>
         
