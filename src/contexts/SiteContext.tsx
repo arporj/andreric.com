@@ -176,6 +176,8 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             paragraphs: fallbackData.about.paragraphs.map((p, i) => 
               i === 1 ? p.replace(/Com (quase uma década|mais de \d+ décadas|quase \d+ décadas|\d+ décadas)/, `Com ${textoDecadas}`) : p
             ),
+            endereco: profile.endereco || '',
+            telefone_raw: profile.telefone || '',
             facts: [
               { label: 'Localização', value: profile.cidade ? `${profile.cidade}, ${profile.pais}` : fallbackData.about.facts[0].value },
               { label: 'E-mail', value: profile.email || 'Não informado', href: profile.email ? `mailto:${profile.email}` : undefined },

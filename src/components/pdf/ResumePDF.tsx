@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, Link } from '@react-pdf/renderer';
 
 const P = {
   colors: {
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontSize: 10,
     color: P.colors.on_surface,
+    paddingVertical: 30,
   },
   sidebar: {
     width: '32%',
@@ -32,8 +33,9 @@ const styles = StyleSheet.create({
   },
   main: {
     width: '68%',
-    padding: 40,
-    paddingLeft: 30,
+    padding: 30,
+    paddingLeft: 25,
+    paddingRight: 30,
     display: 'flex',
     flexDirection: 'column',
   },
@@ -70,6 +72,11 @@ const styles = StyleSheet.create({
   contactValue: {
     fontSize: 9,
     color: P.colors.on_surface,
+    textDecoration: 'none',
+  },
+  contactLink: {
+    fontSize: 9,
+    color: P.colors.primary,
     textDecoration: 'none',
   },
   skillCategory: {
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   },
   experienceItem: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   expHeader: {
     flexDirection: 'row',
@@ -154,107 +161,202 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: P.colors.primary,
     marginTop: 6,
-  }
+  },
+  // Estilo para subtítulo (linha SEM hífen)
+  expSubtitle: {
+    fontSize: 10,
+    color: P.colors.on_surface,
+    fontFamily: 'Helvetica-Bold',
+    marginTop: 4,
+    marginBottom: 2,
+  },
+  // Estilo para bullet (linha COM hífen)
+  bulletRow: {
+    flexDirection: 'row',
+    marginBottom: 3,
+    paddingLeft: 4,
+  },
+  bulletDot: {
+    fontSize: 10,
+    color: P.colors.on_surface_variant,
+    width: 10,
+  },
+  bulletText: {
+    fontSize: 10,
+    color: P.colors.on_surface_variant,
+    lineHeight: 1.5,
+    flex: 1,
+  },
 });
 
-// Tipagem básica para facilitar
-export const ResumePDF = ({ data }: { data: any }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      
-      {/* Coluna da Esquerda (Sidebar) */}
-      <View style={styles.sidebar}>
+/**
+ * Renderiza uma linha de detalhe da experiência:
+ * - Se começa com "- " → é um bullet point (• texto)
+ * - Se NÃO começa com "- " → é um subtítulo (negrito)
+ */
+const renderDetail = (detail: string, i: number) => {
+  const trimmed = detail.trim();
+  
+  if (trimmed.startsWith('- ')) {
+    // Bullet point
+    const text = trimmed.substring(2).trim();
+    return (
+      <View key={i} style={styles.bulletRow} wrap={false}>
+        <Text style={styles.bulletDot}>•</Text>
+        <Text style={styles.bulletText}>{text}</Text>
+      </View>
+    );
+  }
+  
+  // Subtítulo (sem hífen)
+  return (
+    <View key={i} wrap={false}>
+      <Text style={styles.expSubtitle}>{trimmed}</Text>
+    </View>
+  );
+};
+
+export const ResumePDF = ({ data }: { data: any }) => {
+  // Construir localização com endereço
+  const locationFact = data.about.facts.find((f: any) => f.label === 'Localização');
+  const endereco = data.about.endereco || '';
+  const locationValue = endereco 
+    ? `${endereco}, ${locationFact?.value || ''}` 
+    : (locationFact?.value || '');
+
+  // Telefone
+  const telefoneFact = data.about.facts.find((f: any) => f.label === 'Telefone');
+  const telefoneRaw = data.about.telefone_raw || telefoneFact?.value || '';
+  const telefoneNumeros = telefoneRaw.replace(/\D/g, '');
+  const whatsappLink = telefoneNumeros ? `https://wa.me/${telefoneNumeros}` : '';
+
+  // Email
+  const emailFact = data.about.facts.find((f: any) => f.label === 'E-mail');
+  const email = emailFact?.value || '';
+
+  // LinkedIn
+  const linkedinUrl = data.footer?.links?.linkedin || '';
+  const linkedinShort = linkedinUrl
+    .replace('https://www.linkedin.com/in/', '')
+    .replace('https://linkedin.com/in/', '')
+    .replace(/\/$/, '');
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page} wrap>
         
-        {data.hero.imageSrc && (
-          <View style={styles.photoContainer}>
-            <Image src={typeof window !== 'undefined' ? `${window.location.origin}${data.hero.imageSrc}` : data.hero.imageSrc} style={styles.photo} />
+        {/* Coluna da Esquerda (Sidebar) */}
+        <View style={styles.sidebar} fixed>
+          
+          {data.hero.imageSrc && (
+            <View style={styles.photoContainer}>
+              <Image src={typeof window !== 'undefined' ? `${window.location.origin}${data.hero.imageSrc}` : data.hero.imageSrc} style={styles.photo} />
+            </View>
+          )}
+
+          <View style={styles.sidebarSection}>
+            <Text style={styles.sidebarTitle}>Contato</Text>
+            
+            {/* Localização com endereço */}
+            <View style={styles.contactItem}>
+              <Text style={styles.contactLabel}>Localização</Text>
+              <Text style={styles.contactValue}>{locationValue}</Text>
+            </View>
+
+            {/* E-mail */}
+            {email && email !== 'Não informado' && (
+              <View style={styles.contactItem}>
+                <Text style={styles.contactLabel}>E-mail</Text>
+                <Text style={styles.contactValue}>{email}</Text>
+              </View>
+            )}
+
+            {/* Telefone com link WhatsApp */}
+            {telefoneRaw && telefoneRaw !== 'Não informado' && (
+              <View style={styles.contactItem}>
+                <Text style={styles.contactLabel}>Telefone</Text>
+                {whatsappLink ? (
+                  <Link src={whatsappLink} style={styles.contactLink}>
+                    {telefoneRaw}
+                  </Link>
+                ) : (
+                  <Text style={styles.contactValue}>{telefoneRaw}</Text>
+                )}
+              </View>
+            )}
+
+            {/* LinkedIn com URL completa mas texto curto */}
+            {linkedinUrl && linkedinUrl !== '#' && (
+              <View style={styles.contactItem}>
+                <Text style={styles.contactLabel}>LinkedIn</Text>
+                <Link src={linkedinUrl} style={styles.contactLink}>
+                  {linkedinShort}
+                </Link>
+              </View>
+            )}
+
+            {/* Currículo atualizado */}
+            <View style={styles.contactItem}>
+              <Text style={styles.contactLabel}>Currículo Atualizado</Text>
+              <Link src="https://www.andreric.com" style={styles.contactLink}>
+                www.andreric.com
+              </Link>
+            </View>
           </View>
-        )}
 
-        <View style={styles.sidebarSection}>
-          <Text style={styles.sidebarTitle}>Contato</Text>
-          {data.about.facts.map((fact: any) => (
-            <View key={fact.label} style={styles.contactItem}>
-              <Text style={styles.contactLabel}>{fact.label}</Text>
-              <Text style={styles.contactValue}>{fact.value}</Text>
-            </View>
-          ))}
-          {data.footer?.links?.linkedin && (
-            <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>LinkedIn</Text>
-              <Text style={styles.contactValue}>
-                {data.footer.links.linkedin.replace('https://www.linkedin.com/in/', '')}
-              </Text>
-            </View>
-          )}
-          {data.footer?.links?.github && (
-            <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>GitHub</Text>
-              <Text style={styles.contactValue}>
-                {data.footer.links.github.replace('https://github.com/', '')}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.sidebarSection}>
-          <Text style={styles.sidebarTitle}>Hard Skills</Text>
-          {data.skills.categories.map((cat: any) => (
-            <View key={cat.id} style={styles.skillCategory}>
-              <Text style={styles.skillCatTitle}>{cat.title}</Text>
-              <View style={styles.skillsWrap}>
-                {cat.tags.map((tag: string, index: number) => (
-                  <Text key={index} style={styles.skillChip}>{tag}</Text>
-                ))}
-              </View>
-            </View>
-          ))}
-        </View>
-
-      </View>
-
-      {/* Coluna da Direita (Body) */}
-      <View style={styles.main}>
-        
-        <View style={styles.header}>
-          <Text style={styles.name}>{data.hero.name || 'André Ricardo'}</Text>
-          <Text style={styles.title}>{data.hero.upperSub}</Text>
-        </View>
-
-        <View style={{ marginBottom: 24 }}>
-          <Text style={styles.sectionTitle}>Resumo Profissional</Text>
-          {data.about.paragraphs.map((p: string, i: number) => (
-            <Text key={i} style={styles.paragraph}>{p}</Text>
-          ))}
-        </View>
-
-        <View>
-          <Text style={styles.sectionTitle}>Experiência Profissional</Text>
-          {data.experience.items.slice(0, 4).map((exp: any) => (
-            <View key={exp.id} style={styles.experienceItem}>
-              <View style={styles.expHeader}>
-                <View style={styles.expRoleWrapper}>
-                  <Text style={styles.expRole}>{exp.role}</Text>
-                  <Text style={styles.expCompany}>{exp.company}</Text>
+          <View style={styles.sidebarSection}>
+            <Text style={styles.sidebarTitle}>Hard Skills</Text>
+            {data.skills.categories.map((cat: any) => (
+              <View key={cat.id} style={styles.skillCategory}>
+                <Text style={styles.skillCatTitle}>{cat.title}</Text>
+                <View style={styles.skillsWrap}>
+                  {cat.tags.map((tag: string, index: number) => (
+                    <Text key={index} style={styles.skillChip}>{tag}</Text>
+                  ))}
                 </View>
-                <Text style={styles.expDate}>{exp.period}</Text>
               </View>
-              {exp.details.map((detail: string, i: number) => (
-                <View key={i} style={{ flexDirection: 'row', marginBottom: 4 }}>
-                  <Text style={{ fontSize: 10, color: P.colors.on_surface_variant, width: 10 }}>•</Text>
-                  <Text style={{ fontSize: 10, color: P.colors.on_surface_variant, lineHeight: 1.4, flex: 1 }}>{detail}</Text>
-                </View>
-              ))}
-              {exp.tecnologias && (
-                <Text style={styles.expTech}>Stacks: {exp.tecnologias}</Text>
-              )}
-            </View>
-          ))}
+            ))}
+          </View>
+
         </View>
 
-      </View>
+        {/* Coluna da Direita (Body) */}
+        <View style={styles.main}>
+          
+          <View style={styles.header}>
+            <Text style={styles.name}>{data.hero.name || 'André Ricardo'}</Text>
+            <Text style={styles.title}>{data.hero.upperSub}</Text>
+          </View>
 
-    </Page>
-  </Document>
-);
+          <View style={{ marginBottom: 24 }}>
+            <Text style={styles.sectionTitle}>Resumo Profissional</Text>
+            {data.about.paragraphs.map((p: string, i: number) => (
+              <Text key={i} style={styles.paragraph}>{p}</Text>
+            ))}
+          </View>
 
+          <View>
+            <Text style={styles.sectionTitle}>Experiência Profissional</Text>
+            {data.experience.items.map((exp: any) => (
+              <View key={exp.id} style={styles.experienceItem} wrap={false}>
+                <View style={styles.expHeader}>
+                  <View style={styles.expRoleWrapper}>
+                    <Text style={styles.expRole}>{exp.role}</Text>
+                    <Text style={styles.expCompany}>{exp.company}</Text>
+                  </View>
+                  <Text style={styles.expDate}>{exp.period}</Text>
+                </View>
+                {exp.details.map((detail: string, i: number) => renderDetail(detail, i))}
+                {exp.tecnologias && (
+                  <Text style={styles.expTech}>Stacks: {exp.tecnologias}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+
+        </View>
+
+      </Page>
+    </Document>
+  );
+};
